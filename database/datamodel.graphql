@@ -1,0 +1,90 @@
+type User {
+  id: ID! @unique
+  name: String!
+  email: String! @unique
+  password: String!
+  notes: [Note!]!
+  groups: [UserGroup!]! @relation(name: "UsersGroups")
+  defaultGroup: UserGroup! @relation(name: "DefaultGroup")
+}
+
+type UserGroup {
+  id: ID! @unique
+  name: String!
+  description: String
+  personalGroup: Boolean! @default(value: "true")
+  owner: User! @relation(name: "GroupOwner")
+  users: [User!]! @relation(name: "UsersGroups")
+  notes: [Note!]!
+  customers: [Customer!]!
+  categories: [Category!]!
+}
+
+type Note {
+  id: ID! @unique
+  createdAt: DateTime!
+  createdBy: User!
+  content: String!
+  archived: Boolean! @default(value: "false")
+}
+
+type Category {
+  id: ID! @unique
+  name: String! @unique
+  description: String!
+  equipment: [Equipment!]!
+  diagnostics: [DiagnosticProcedure!]!
+}
+
+type Equipment {
+  id: ID! @unique
+  name: String!
+  description: String!
+  model: String!
+  category: Category!
+  diagnostics: [DiagnosticProcedure!]!
+}
+
+type Asset {
+  id: ID! @unique
+  serial: String!
+  description: String!
+  location: Location!
+  equipment: Equipment!
+  notes: [Note!]!
+}
+
+type Customer {
+  id: ID! @unique
+  name: String!
+  notes: [Note!]!
+}
+
+type Location {
+  id: ID! @unique
+  name: String!
+  address: String!
+  assets: [Asset!]!
+  customer: Customer!
+  notes: [Note!]!
+}
+
+type DiagnosticProcedure {
+  id: ID! @unique
+  createdBy: User!
+  category: Category!
+  equipment: Equipment
+  description: String
+  name: String!
+  startNode: DiagnosticNode!
+    @relation(name: "DiagnosticToNode", onDelete: CASCADE)
+}
+
+type DiagnosticNode {
+  id: ID! @unique
+  procedure: DiagnosticProcedure! @relation(name: "DiagnosticToNode")
+  answerNodes: [DiagnosticNode!]! @relation(name: "AnswerNode")
+  answer: String!
+  content: String!
+  resolution: Boolean! @default(value: "false")
+}
