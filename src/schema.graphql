@@ -1,3 +1,38 @@
+#import Category, Equipment, Asset, Customer, Location, UserGroup, Note from "./generated/prisma.graphql"
+
 type Query {
   info: String!
+  getCurrentUser: User
+}
+
+type Mutation {
+  register(email: String!, password: String!, name: String!): User
+  login(email: String!, password: String!): AuthPayload
+  createUserGroup(name: String!, description: String): UserGroup
+  createCustomer(name: String!, groupId: ID!): Customer
+  createLocation(name: String!, address: String!, customerId: ID!): Location
+  createCategory(name: String!, description: String!, groupId: ID!): Category
+  createEquipment(
+    name: String!
+    description: String!
+    model: String!
+    categoryId: ID!
+  ): Equipment
+  createAsset(
+    serial: String!
+    description: String!
+    locationId: ID!
+    equipmentId: ID!
+  ): Asset
+}
+
+type User {
+  id: ID!
+  name: String!
+  groups: [UserGroup]
+}
+
+type AuthPayload {
+  token: String
+  user: User
 }

@@ -5,7 +5,7 @@ type User {
   password: String!
   notes: [Note!]!
   groups: [UserGroup!]! @relation(name: "UsersGroups")
-  defaultGroup: UserGroup! @relation(name: "DefaultGroup")
+  defaultGroup: UserGroup @relation(name: "DefaultGroup")
 }
 
 type UserGroup {
@@ -30,10 +30,11 @@ type Note {
 
 type Category {
   id: ID! @unique
-  name: String! @unique
+  name: String!
   description: String!
   equipment: [Equipment!]!
   diagnostics: [DiagnosticProcedure!]!
+  group: UserGroup!
 }
 
 type Equipment {
@@ -43,6 +44,7 @@ type Equipment {
   model: String!
   category: Category!
   diagnostics: [DiagnosticProcedure!]!
+  assets: [Asset!]!
 }
 
 type Asset {
@@ -58,6 +60,8 @@ type Customer {
   id: ID! @unique
   name: String!
   notes: [Note!]!
+  locations: [Location!]!
+  group: UserGroup!
 }
 
 type Location {

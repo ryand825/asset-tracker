@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/ryan-a5caf5/asset-tracker/dev
-# timestamp: Sun Sep 02 2018 23:24:03 GMT-0600 (Mountain Daylight Time)
+# timestamp: Mon Sep 03 2018 16:32:35 GMT-0600 (Mountain Daylight Time)
 
 type AggregateAsset {
   count: Int!
@@ -64,8 +64,13 @@ input AssetCreateInput {
   serial: String!
   description: String!
   location: LocationCreateOneWithoutAssetsInput!
-  equipment: EquipmentCreateOneInput!
+  equipment: EquipmentCreateOneWithoutAssetsInput!
   notes: NoteCreateManyInput
+}
+
+input AssetCreateManyWithoutEquipmentInput {
+  create: [AssetCreateWithoutEquipmentInput!]
+  connect: [AssetWhereUniqueInput!]
 }
 
 input AssetCreateManyWithoutLocationInput {
@@ -73,10 +78,17 @@ input AssetCreateManyWithoutLocationInput {
   connect: [AssetWhereUniqueInput!]
 }
 
+input AssetCreateWithoutEquipmentInput {
+  serial: String!
+  description: String!
+  location: LocationCreateOneWithoutAssetsInput!
+  notes: NoteCreateManyInput
+}
+
 input AssetCreateWithoutLocationInput {
   serial: String!
   description: String!
-  equipment: EquipmentCreateOneInput!
+  equipment: EquipmentCreateOneWithoutAssetsInput!
   notes: NoteCreateManyInput
 }
 
@@ -151,8 +163,17 @@ input AssetUpdateInput {
   serial: String
   description: String
   location: LocationUpdateOneWithoutAssetsInput
-  equipment: EquipmentUpdateOneInput
+  equipment: EquipmentUpdateOneWithoutAssetsInput
   notes: NoteUpdateManyInput
+}
+
+input AssetUpdateManyWithoutEquipmentInput {
+  create: [AssetCreateWithoutEquipmentInput!]
+  connect: [AssetWhereUniqueInput!]
+  disconnect: [AssetWhereUniqueInput!]
+  delete: [AssetWhereUniqueInput!]
+  update: [AssetUpdateWithWhereUniqueWithoutEquipmentInput!]
+  upsert: [AssetUpsertWithWhereUniqueWithoutEquipmentInput!]
 }
 
 input AssetUpdateManyWithoutLocationInput {
@@ -164,16 +185,34 @@ input AssetUpdateManyWithoutLocationInput {
   upsert: [AssetUpsertWithWhereUniqueWithoutLocationInput!]
 }
 
+input AssetUpdateWithoutEquipmentDataInput {
+  serial: String
+  description: String
+  location: LocationUpdateOneWithoutAssetsInput
+  notes: NoteUpdateManyInput
+}
+
 input AssetUpdateWithoutLocationDataInput {
   serial: String
   description: String
-  equipment: EquipmentUpdateOneInput
+  equipment: EquipmentUpdateOneWithoutAssetsInput
   notes: NoteUpdateManyInput
+}
+
+input AssetUpdateWithWhereUniqueWithoutEquipmentInput {
+  where: AssetWhereUniqueInput!
+  data: AssetUpdateWithoutEquipmentDataInput!
 }
 
 input AssetUpdateWithWhereUniqueWithoutLocationInput {
   where: AssetWhereUniqueInput!
   data: AssetUpdateWithoutLocationDataInput!
+}
+
+input AssetUpsertWithWhereUniqueWithoutEquipmentInput {
+  where: AssetWhereUniqueInput!
+  update: AssetUpdateWithoutEquipmentDataInput!
+  create: AssetCreateWithoutEquipmentInput!
 }
 
 input AssetUpsertWithWhereUniqueWithoutLocationInput {
@@ -333,6 +372,7 @@ type Category implements Node {
   description: String!
   equipment(where: EquipmentWhereInput, orderBy: EquipmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Equipment!]
   diagnostics(where: DiagnosticProcedureWhereInput, orderBy: DiagnosticProcedureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DiagnosticProcedure!]
+  group(where: UserGroupWhereInput): UserGroup!
 }
 
 """A connection to a list of items."""
@@ -350,10 +390,11 @@ input CategoryCreateInput {
   description: String!
   equipment: EquipmentCreateManyWithoutCategoryInput
   diagnostics: DiagnosticProcedureCreateManyWithoutCategoryInput
+  group: UserGroupCreateOneWithoutCategoriesInput!
 }
 
-input CategoryCreateManyInput {
-  create: [CategoryCreateInput!]
+input CategoryCreateManyWithoutGroupInput {
+  create: [CategoryCreateWithoutGroupInput!]
   connect: [CategoryWhereUniqueInput!]
 }
 
@@ -371,11 +412,20 @@ input CategoryCreateWithoutDiagnosticsInput {
   name: String!
   description: String!
   equipment: EquipmentCreateManyWithoutCategoryInput
+  group: UserGroupCreateOneWithoutCategoriesInput!
 }
 
 input CategoryCreateWithoutEquipmentInput {
   name: String!
   description: String!
+  diagnostics: DiagnosticProcedureCreateManyWithoutCategoryInput
+  group: UserGroupCreateOneWithoutCategoriesInput!
+}
+
+input CategoryCreateWithoutGroupInput {
+  name: String!
+  description: String!
+  equipment: EquipmentCreateManyWithoutCategoryInput
   diagnostics: DiagnosticProcedureCreateManyWithoutCategoryInput
 }
 
@@ -446,27 +496,21 @@ input CategorySubscriptionWhereInput {
   node: CategoryWhereInput
 }
 
-input CategoryUpdateDataInput {
-  name: String
-  description: String
-  equipment: EquipmentUpdateManyWithoutCategoryInput
-  diagnostics: DiagnosticProcedureUpdateManyWithoutCategoryInput
-}
-
 input CategoryUpdateInput {
   name: String
   description: String
   equipment: EquipmentUpdateManyWithoutCategoryInput
   diagnostics: DiagnosticProcedureUpdateManyWithoutCategoryInput
+  group: UserGroupUpdateOneWithoutCategoriesInput
 }
 
-input CategoryUpdateManyInput {
-  create: [CategoryCreateInput!]
+input CategoryUpdateManyWithoutGroupInput {
+  create: [CategoryCreateWithoutGroupInput!]
   connect: [CategoryWhereUniqueInput!]
   disconnect: [CategoryWhereUniqueInput!]
   delete: [CategoryWhereUniqueInput!]
-  update: [CategoryUpdateWithWhereUniqueNestedInput!]
-  upsert: [CategoryUpsertWithWhereUniqueNestedInput!]
+  update: [CategoryUpdateWithWhereUniqueWithoutGroupInput!]
+  upsert: [CategoryUpsertWithWhereUniqueWithoutGroupInput!]
 }
 
 input CategoryUpdateOneWithoutDiagnosticsInput {
@@ -489,17 +533,26 @@ input CategoryUpdateWithoutDiagnosticsDataInput {
   name: String
   description: String
   equipment: EquipmentUpdateManyWithoutCategoryInput
+  group: UserGroupUpdateOneWithoutCategoriesInput
 }
 
 input CategoryUpdateWithoutEquipmentDataInput {
   name: String
   description: String
   diagnostics: DiagnosticProcedureUpdateManyWithoutCategoryInput
+  group: UserGroupUpdateOneWithoutCategoriesInput
 }
 
-input CategoryUpdateWithWhereUniqueNestedInput {
+input CategoryUpdateWithoutGroupDataInput {
+  name: String
+  description: String
+  equipment: EquipmentUpdateManyWithoutCategoryInput
+  diagnostics: DiagnosticProcedureUpdateManyWithoutCategoryInput
+}
+
+input CategoryUpdateWithWhereUniqueWithoutGroupInput {
   where: CategoryWhereUniqueInput!
-  data: CategoryUpdateDataInput!
+  data: CategoryUpdateWithoutGroupDataInput!
 }
 
 input CategoryUpsertWithoutDiagnosticsInput {
@@ -512,10 +565,10 @@ input CategoryUpsertWithoutEquipmentInput {
   create: CategoryCreateWithoutEquipmentInput!
 }
 
-input CategoryUpsertWithWhereUniqueNestedInput {
+input CategoryUpsertWithWhereUniqueWithoutGroupInput {
   where: CategoryWhereUniqueInput!
-  update: CategoryUpdateDataInput!
-  create: CategoryCreateInput!
+  update: CategoryUpdateWithoutGroupDataInput!
+  create: CategoryCreateWithoutGroupInput!
 }
 
 input CategoryWhereInput {
@@ -653,17 +706,19 @@ input CategoryWhereInput {
   diagnostics_every: DiagnosticProcedureWhereInput
   diagnostics_some: DiagnosticProcedureWhereInput
   diagnostics_none: DiagnosticProcedureWhereInput
+  group: UserGroupWhereInput
 }
 
 input CategoryWhereUniqueInput {
   id: ID
-  name: String
 }
 
 type Customer implements Node {
   id: ID!
   name: String!
   notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
+  locations(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Location!]
+  group(where: UserGroupWhereInput): UserGroup!
 }
 
 """A connection to a list of items."""
@@ -679,16 +734,30 @@ type CustomerConnection {
 input CustomerCreateInput {
   name: String!
   notes: NoteCreateManyInput
+  locations: LocationCreateManyWithoutCustomerInput
+  group: UserGroupCreateOneWithoutCustomersInput!
 }
 
-input CustomerCreateManyInput {
-  create: [CustomerCreateInput!]
+input CustomerCreateManyWithoutGroupInput {
+  create: [CustomerCreateWithoutGroupInput!]
   connect: [CustomerWhereUniqueInput!]
 }
 
-input CustomerCreateOneInput {
-  create: CustomerCreateInput
+input CustomerCreateOneWithoutLocationsInput {
+  create: CustomerCreateWithoutLocationsInput
   connect: CustomerWhereUniqueInput
+}
+
+input CustomerCreateWithoutGroupInput {
+  name: String!
+  notes: NoteCreateManyInput
+  locations: LocationCreateManyWithoutCustomerInput
+}
+
+input CustomerCreateWithoutLocationsInput {
+  name: String!
+  notes: NoteCreateManyInput
+  group: UserGroupCreateOneWithoutCustomersInput!
 }
 
 """An edge in a connection."""
@@ -755,47 +824,56 @@ input CustomerSubscriptionWhereInput {
   node: CustomerWhereInput
 }
 
-input CustomerUpdateDataInput {
-  name: String
-  notes: NoteUpdateManyInput
-}
-
 input CustomerUpdateInput {
   name: String
   notes: NoteUpdateManyInput
+  locations: LocationUpdateManyWithoutCustomerInput
+  group: UserGroupUpdateOneWithoutCustomersInput
 }
 
-input CustomerUpdateManyInput {
-  create: [CustomerCreateInput!]
+input CustomerUpdateManyWithoutGroupInput {
+  create: [CustomerCreateWithoutGroupInput!]
   connect: [CustomerWhereUniqueInput!]
   disconnect: [CustomerWhereUniqueInput!]
   delete: [CustomerWhereUniqueInput!]
-  update: [CustomerUpdateWithWhereUniqueNestedInput!]
-  upsert: [CustomerUpsertWithWhereUniqueNestedInput!]
+  update: [CustomerUpdateWithWhereUniqueWithoutGroupInput!]
+  upsert: [CustomerUpsertWithWhereUniqueWithoutGroupInput!]
 }
 
-input CustomerUpdateOneInput {
-  create: CustomerCreateInput
+input CustomerUpdateOneWithoutLocationsInput {
+  create: CustomerCreateWithoutLocationsInput
   connect: CustomerWhereUniqueInput
   delete: Boolean
-  update: CustomerUpdateDataInput
-  upsert: CustomerUpsertNestedInput
+  update: CustomerUpdateWithoutLocationsDataInput
+  upsert: CustomerUpsertWithoutLocationsInput
 }
 
-input CustomerUpdateWithWhereUniqueNestedInput {
+input CustomerUpdateWithoutGroupDataInput {
+  name: String
+  notes: NoteUpdateManyInput
+  locations: LocationUpdateManyWithoutCustomerInput
+}
+
+input CustomerUpdateWithoutLocationsDataInput {
+  name: String
+  notes: NoteUpdateManyInput
+  group: UserGroupUpdateOneWithoutCustomersInput
+}
+
+input CustomerUpdateWithWhereUniqueWithoutGroupInput {
   where: CustomerWhereUniqueInput!
-  data: CustomerUpdateDataInput!
+  data: CustomerUpdateWithoutGroupDataInput!
 }
 
-input CustomerUpsertNestedInput {
-  update: CustomerUpdateDataInput!
-  create: CustomerCreateInput!
+input CustomerUpsertWithoutLocationsInput {
+  update: CustomerUpdateWithoutLocationsDataInput!
+  create: CustomerCreateWithoutLocationsInput!
 }
 
-input CustomerUpsertWithWhereUniqueNestedInput {
+input CustomerUpsertWithWhereUniqueWithoutGroupInput {
   where: CustomerWhereUniqueInput!
-  update: CustomerUpdateDataInput!
-  create: CustomerCreateInput!
+  update: CustomerUpdateWithoutGroupDataInput!
+  create: CustomerCreateWithoutGroupInput!
 }
 
 input CustomerWhereInput {
@@ -890,6 +968,10 @@ input CustomerWhereInput {
   notes_every: NoteWhereInput
   notes_some: NoteWhereInput
   notes_none: NoteWhereInput
+  locations_every: LocationWhereInput
+  locations_some: LocationWhereInput
+  locations_none: LocationWhereInput
+  group: UserGroupWhereInput
 }
 
 input CustomerWhereUniqueInput {
@@ -901,8 +983,8 @@ scalar DateTime
 type DiagnosticNode implements Node {
   id: ID!
   procedure(where: DiagnosticProcedureWhereInput): DiagnosticProcedure!
-  yesNode(where: DiagnosticNodeWhereInput): DiagnosticNode
-  noNode(where: DiagnosticNodeWhereInput): DiagnosticNode
+  answerNodes(where: DiagnosticNodeWhereInput, orderBy: DiagnosticNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DiagnosticNode!]
+  answer: String!
   content: String!
   resolution: Boolean!
 }
@@ -918,16 +1000,16 @@ type DiagnosticNodeConnection {
 }
 
 input DiagnosticNodeCreateInput {
+  answer: String!
   content: String!
   resolution: Boolean
   procedure: DiagnosticProcedureCreateOneWithoutStartNodeInput!
-  yesNode: DiagnosticNodeCreateOneInput
-  noNode: DiagnosticNodeCreateOneInput
+  answerNodes: DiagnosticNodeCreateManyInput
 }
 
-input DiagnosticNodeCreateOneInput {
-  create: DiagnosticNodeCreateInput
-  connect: DiagnosticNodeWhereUniqueInput
+input DiagnosticNodeCreateManyInput {
+  create: [DiagnosticNodeCreateInput!]
+  connect: [DiagnosticNodeWhereUniqueInput!]
 }
 
 input DiagnosticNodeCreateOneWithoutProcedureInput {
@@ -936,10 +1018,10 @@ input DiagnosticNodeCreateOneWithoutProcedureInput {
 }
 
 input DiagnosticNodeCreateWithoutProcedureInput {
+  answer: String!
   content: String!
   resolution: Boolean
-  yesNode: DiagnosticNodeCreateOneInput
-  noNode: DiagnosticNodeCreateOneInput
+  answerNodes: DiagnosticNodeCreateManyInput
 }
 
 """An edge in a connection."""
@@ -954,6 +1036,8 @@ type DiagnosticNodeEdge {
 enum DiagnosticNodeOrderByInput {
   id_ASC
   id_DESC
+  answer_ASC
+  answer_DESC
   content_ASC
   content_DESC
   resolution_ASC
@@ -966,6 +1050,7 @@ enum DiagnosticNodeOrderByInput {
 
 type DiagnosticNodePreviousValues {
   id: ID!
+  answer: String!
   content: String!
   resolution: Boolean!
 }
@@ -1010,28 +1095,28 @@ input DiagnosticNodeSubscriptionWhereInput {
 }
 
 input DiagnosticNodeUpdateDataInput {
+  answer: String
   content: String
   resolution: Boolean
   procedure: DiagnosticProcedureUpdateOneWithoutStartNodeInput
-  yesNode: DiagnosticNodeUpdateOneInput
-  noNode: DiagnosticNodeUpdateOneInput
+  answerNodes: DiagnosticNodeUpdateManyInput
 }
 
 input DiagnosticNodeUpdateInput {
+  answer: String
   content: String
   resolution: Boolean
   procedure: DiagnosticProcedureUpdateOneWithoutStartNodeInput
-  yesNode: DiagnosticNodeUpdateOneInput
-  noNode: DiagnosticNodeUpdateOneInput
+  answerNodes: DiagnosticNodeUpdateManyInput
 }
 
-input DiagnosticNodeUpdateOneInput {
-  create: DiagnosticNodeCreateInput
-  connect: DiagnosticNodeWhereUniqueInput
-  disconnect: Boolean
-  delete: Boolean
-  update: DiagnosticNodeUpdateDataInput
-  upsert: DiagnosticNodeUpsertNestedInput
+input DiagnosticNodeUpdateManyInput {
+  create: [DiagnosticNodeCreateInput!]
+  connect: [DiagnosticNodeWhereUniqueInput!]
+  disconnect: [DiagnosticNodeWhereUniqueInput!]
+  delete: [DiagnosticNodeWhereUniqueInput!]
+  update: [DiagnosticNodeUpdateWithWhereUniqueNestedInput!]
+  upsert: [DiagnosticNodeUpsertWithWhereUniqueNestedInput!]
 }
 
 input DiagnosticNodeUpdateOneWithoutProcedureInput {
@@ -1043,20 +1128,26 @@ input DiagnosticNodeUpdateOneWithoutProcedureInput {
 }
 
 input DiagnosticNodeUpdateWithoutProcedureDataInput {
+  answer: String
   content: String
   resolution: Boolean
-  yesNode: DiagnosticNodeUpdateOneInput
-  noNode: DiagnosticNodeUpdateOneInput
+  answerNodes: DiagnosticNodeUpdateManyInput
 }
 
-input DiagnosticNodeUpsertNestedInput {
-  update: DiagnosticNodeUpdateDataInput!
-  create: DiagnosticNodeCreateInput!
+input DiagnosticNodeUpdateWithWhereUniqueNestedInput {
+  where: DiagnosticNodeWhereUniqueInput!
+  data: DiagnosticNodeUpdateDataInput!
 }
 
 input DiagnosticNodeUpsertWithoutProcedureInput {
   update: DiagnosticNodeUpdateWithoutProcedureDataInput!
   create: DiagnosticNodeCreateWithoutProcedureInput!
+}
+
+input DiagnosticNodeUpsertWithWhereUniqueNestedInput {
+  where: DiagnosticNodeWhereUniqueInput!
+  update: DiagnosticNodeUpdateDataInput!
+  create: DiagnosticNodeCreateInput!
 }
 
 input DiagnosticNodeWhereInput {
@@ -1108,6 +1199,46 @@ input DiagnosticNodeWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  answer: String
+
+  """All values that are not equal to given value."""
+  answer_not: String
+
+  """All values that are contained in given list."""
+  answer_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer_not_in: [String!]
+
+  """All values less than the given value."""
+  answer_lt: String
+
+  """All values less than or equal the given value."""
+  answer_lte: String
+
+  """All values greater than the given value."""
+  answer_gt: String
+
+  """All values greater than or equal the given value."""
+  answer_gte: String
+
+  """All values containing the given string."""
+  answer_contains: String
+
+  """All values not containing the given string."""
+  answer_not_contains: String
+
+  """All values starting with the given string."""
+  answer_starts_with: String
+
+  """All values not starting with the given string."""
+  answer_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer_ends_with: String
+
+  """All values not ending with the given string."""
+  answer_not_ends_with: String
   content: String
 
   """All values that are not equal to given value."""
@@ -1153,8 +1284,9 @@ input DiagnosticNodeWhereInput {
   """All values that are not equal to given value."""
   resolution_not: Boolean
   procedure: DiagnosticProcedureWhereInput
-  yesNode: DiagnosticNodeWhereInput
-  noNode: DiagnosticNodeWhereInput
+  answerNodes_every: DiagnosticNodeWhereInput
+  answerNodes_some: DiagnosticNodeWhereInput
+  answerNodes_none: DiagnosticNodeWhereInput
 }
 
 input DiagnosticNodeWhereUniqueInput {
@@ -1528,6 +1660,7 @@ type Equipment implements Node {
   model: String!
   category(where: CategoryWhereInput): Category!
   diagnostics(where: DiagnosticProcedureWhereInput, orderBy: DiagnosticProcedureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DiagnosticProcedure!]
+  assets(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Asset!]
 }
 
 """A connection to a list of items."""
@@ -1546,6 +1679,7 @@ input EquipmentCreateInput {
   model: String!
   category: CategoryCreateOneWithoutEquipmentInput!
   diagnostics: DiagnosticProcedureCreateManyWithoutEquipmentInput
+  assets: AssetCreateManyWithoutEquipmentInput
 }
 
 input EquipmentCreateManyWithoutCategoryInput {
@@ -1553,8 +1687,8 @@ input EquipmentCreateManyWithoutCategoryInput {
   connect: [EquipmentWhereUniqueInput!]
 }
 
-input EquipmentCreateOneInput {
-  create: EquipmentCreateInput
+input EquipmentCreateOneWithoutAssetsInput {
+  create: EquipmentCreateWithoutAssetsInput
   connect: EquipmentWhereUniqueInput
 }
 
@@ -1563,11 +1697,20 @@ input EquipmentCreateOneWithoutDiagnosticsInput {
   connect: EquipmentWhereUniqueInput
 }
 
+input EquipmentCreateWithoutAssetsInput {
+  name: String!
+  description: String!
+  model: String!
+  category: CategoryCreateOneWithoutEquipmentInput!
+  diagnostics: DiagnosticProcedureCreateManyWithoutEquipmentInput
+}
+
 input EquipmentCreateWithoutCategoryInput {
   name: String!
   description: String!
   model: String!
   diagnostics: DiagnosticProcedureCreateManyWithoutEquipmentInput
+  assets: AssetCreateManyWithoutEquipmentInput
 }
 
 input EquipmentCreateWithoutDiagnosticsInput {
@@ -1575,6 +1718,7 @@ input EquipmentCreateWithoutDiagnosticsInput {
   description: String!
   model: String!
   category: CategoryCreateOneWithoutEquipmentInput!
+  assets: AssetCreateManyWithoutEquipmentInput
 }
 
 """An edge in a connection."""
@@ -1647,20 +1791,13 @@ input EquipmentSubscriptionWhereInput {
   node: EquipmentWhereInput
 }
 
-input EquipmentUpdateDataInput {
-  name: String
-  description: String
-  model: String
-  category: CategoryUpdateOneWithoutEquipmentInput
-  diagnostics: DiagnosticProcedureUpdateManyWithoutEquipmentInput
-}
-
 input EquipmentUpdateInput {
   name: String
   description: String
   model: String
   category: CategoryUpdateOneWithoutEquipmentInput
   diagnostics: DiagnosticProcedureUpdateManyWithoutEquipmentInput
+  assets: AssetUpdateManyWithoutEquipmentInput
 }
 
 input EquipmentUpdateManyWithoutCategoryInput {
@@ -1672,12 +1809,12 @@ input EquipmentUpdateManyWithoutCategoryInput {
   upsert: [EquipmentUpsertWithWhereUniqueWithoutCategoryInput!]
 }
 
-input EquipmentUpdateOneInput {
-  create: EquipmentCreateInput
+input EquipmentUpdateOneWithoutAssetsInput {
+  create: EquipmentCreateWithoutAssetsInput
   connect: EquipmentWhereUniqueInput
   delete: Boolean
-  update: EquipmentUpdateDataInput
-  upsert: EquipmentUpsertNestedInput
+  update: EquipmentUpdateWithoutAssetsDataInput
+  upsert: EquipmentUpsertWithoutAssetsInput
 }
 
 input EquipmentUpdateOneWithoutDiagnosticsInput {
@@ -1689,11 +1826,20 @@ input EquipmentUpdateOneWithoutDiagnosticsInput {
   upsert: EquipmentUpsertWithoutDiagnosticsInput
 }
 
+input EquipmentUpdateWithoutAssetsDataInput {
+  name: String
+  description: String
+  model: String
+  category: CategoryUpdateOneWithoutEquipmentInput
+  diagnostics: DiagnosticProcedureUpdateManyWithoutEquipmentInput
+}
+
 input EquipmentUpdateWithoutCategoryDataInput {
   name: String
   description: String
   model: String
   diagnostics: DiagnosticProcedureUpdateManyWithoutEquipmentInput
+  assets: AssetUpdateManyWithoutEquipmentInput
 }
 
 input EquipmentUpdateWithoutDiagnosticsDataInput {
@@ -1701,6 +1847,7 @@ input EquipmentUpdateWithoutDiagnosticsDataInput {
   description: String
   model: String
   category: CategoryUpdateOneWithoutEquipmentInput
+  assets: AssetUpdateManyWithoutEquipmentInput
 }
 
 input EquipmentUpdateWithWhereUniqueWithoutCategoryInput {
@@ -1708,9 +1855,9 @@ input EquipmentUpdateWithWhereUniqueWithoutCategoryInput {
   data: EquipmentUpdateWithoutCategoryDataInput!
 }
 
-input EquipmentUpsertNestedInput {
-  update: EquipmentUpdateDataInput!
-  create: EquipmentCreateInput!
+input EquipmentUpsertWithoutAssetsInput {
+  update: EquipmentUpdateWithoutAssetsDataInput!
+  create: EquipmentCreateWithoutAssetsInput!
 }
 
 input EquipmentUpsertWithoutDiagnosticsInput {
@@ -1897,6 +2044,9 @@ input EquipmentWhereInput {
   diagnostics_every: DiagnosticProcedureWhereInput
   diagnostics_some: DiagnosticProcedureWhereInput
   diagnostics_none: DiagnosticProcedureWhereInput
+  assets_every: AssetWhereInput
+  assets_some: AssetWhereInput
+  assets_none: AssetWhereInput
 }
 
 input EquipmentWhereUniqueInput {
@@ -1926,8 +2076,13 @@ input LocationCreateInput {
   name: String!
   address: String!
   assets: AssetCreateManyWithoutLocationInput
-  customer: CustomerCreateOneInput!
+  customer: CustomerCreateOneWithoutLocationsInput!
   notes: NoteCreateManyInput
+}
+
+input LocationCreateManyWithoutCustomerInput {
+  create: [LocationCreateWithoutCustomerInput!]
+  connect: [LocationWhereUniqueInput!]
 }
 
 input LocationCreateOneWithoutAssetsInput {
@@ -1938,7 +2093,14 @@ input LocationCreateOneWithoutAssetsInput {
 input LocationCreateWithoutAssetsInput {
   name: String!
   address: String!
-  customer: CustomerCreateOneInput!
+  customer: CustomerCreateOneWithoutLocationsInput!
+  notes: NoteCreateManyInput
+}
+
+input LocationCreateWithoutCustomerInput {
+  name: String!
+  address: String!
+  assets: AssetCreateManyWithoutLocationInput
   notes: NoteCreateManyInput
 }
 
@@ -2013,8 +2175,17 @@ input LocationUpdateInput {
   name: String
   address: String
   assets: AssetUpdateManyWithoutLocationInput
-  customer: CustomerUpdateOneInput
+  customer: CustomerUpdateOneWithoutLocationsInput
   notes: NoteUpdateManyInput
+}
+
+input LocationUpdateManyWithoutCustomerInput {
+  create: [LocationCreateWithoutCustomerInput!]
+  connect: [LocationWhereUniqueInput!]
+  disconnect: [LocationWhereUniqueInput!]
+  delete: [LocationWhereUniqueInput!]
+  update: [LocationUpdateWithWhereUniqueWithoutCustomerInput!]
+  upsert: [LocationUpsertWithWhereUniqueWithoutCustomerInput!]
 }
 
 input LocationUpdateOneWithoutAssetsInput {
@@ -2028,13 +2199,31 @@ input LocationUpdateOneWithoutAssetsInput {
 input LocationUpdateWithoutAssetsDataInput {
   name: String
   address: String
-  customer: CustomerUpdateOneInput
+  customer: CustomerUpdateOneWithoutLocationsInput
   notes: NoteUpdateManyInput
+}
+
+input LocationUpdateWithoutCustomerDataInput {
+  name: String
+  address: String
+  assets: AssetUpdateManyWithoutLocationInput
+  notes: NoteUpdateManyInput
+}
+
+input LocationUpdateWithWhereUniqueWithoutCustomerInput {
+  where: LocationWhereUniqueInput!
+  data: LocationUpdateWithoutCustomerDataInput!
 }
 
 input LocationUpsertWithoutAssetsInput {
   update: LocationUpdateWithoutAssetsDataInput!
   create: LocationCreateWithoutAssetsInput!
+}
+
+input LocationUpsertWithWhereUniqueWithoutCustomerInput {
+  where: LocationWhereUniqueInput!
+  update: LocationUpdateWithoutCustomerDataInput!
+  create: LocationCreateWithoutCustomerInput!
 }
 
 input LocationWhereInput {
@@ -2186,65 +2375,65 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-  createAsset(data: AssetCreateInput!): Asset!
-  createLocation(data: LocationCreateInput!): Location!
-  createDiagnosticProcedure(data: DiagnosticProcedureCreateInput!): DiagnosticProcedure!
-  createDiagnosticNode(data: DiagnosticNodeCreateInput!): DiagnosticNode!
-  createCustomer(data: CustomerCreateInput!): Customer!
   createCategory(data: CategoryCreateInput!): Category!
   createEquipment(data: EquipmentCreateInput!): Equipment!
+  createAsset(data: AssetCreateInput!): Asset!
+  createCustomer(data: CustomerCreateInput!): Customer!
+  createLocation(data: LocationCreateInput!): Location!
+  createDiagnosticProcedure(data: DiagnosticProcedureCreateInput!): DiagnosticProcedure!
   createUserGroup(data: UserGroupCreateInput!): UserGroup!
   createUser(data: UserCreateInput!): User!
+  createDiagnosticNode(data: DiagnosticNodeCreateInput!): DiagnosticNode!
   createNote(data: NoteCreateInput!): Note!
-  updateAsset(data: AssetUpdateInput!, where: AssetWhereUniqueInput!): Asset
-  updateLocation(data: LocationUpdateInput!, where: LocationWhereUniqueInput!): Location
-  updateDiagnosticProcedure(data: DiagnosticProcedureUpdateInput!, where: DiagnosticProcedureWhereUniqueInput!): DiagnosticProcedure
-  updateDiagnosticNode(data: DiagnosticNodeUpdateInput!, where: DiagnosticNodeWhereUniqueInput!): DiagnosticNode
-  updateCustomer(data: CustomerUpdateInput!, where: CustomerWhereUniqueInput!): Customer
   updateCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
   updateEquipment(data: EquipmentUpdateInput!, where: EquipmentWhereUniqueInput!): Equipment
+  updateAsset(data: AssetUpdateInput!, where: AssetWhereUniqueInput!): Asset
+  updateCustomer(data: CustomerUpdateInput!, where: CustomerWhereUniqueInput!): Customer
+  updateLocation(data: LocationUpdateInput!, where: LocationWhereUniqueInput!): Location
+  updateDiagnosticProcedure(data: DiagnosticProcedureUpdateInput!, where: DiagnosticProcedureWhereUniqueInput!): DiagnosticProcedure
   updateUserGroup(data: UserGroupUpdateInput!, where: UserGroupWhereUniqueInput!): UserGroup
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateDiagnosticNode(data: DiagnosticNodeUpdateInput!, where: DiagnosticNodeWhereUniqueInput!): DiagnosticNode
   updateNote(data: NoteUpdateInput!, where: NoteWhereUniqueInput!): Note
-  deleteAsset(where: AssetWhereUniqueInput!): Asset
-  deleteLocation(where: LocationWhereUniqueInput!): Location
-  deleteDiagnosticProcedure(where: DiagnosticProcedureWhereUniqueInput!): DiagnosticProcedure
-  deleteDiagnosticNode(where: DiagnosticNodeWhereUniqueInput!): DiagnosticNode
-  deleteCustomer(where: CustomerWhereUniqueInput!): Customer
   deleteCategory(where: CategoryWhereUniqueInput!): Category
   deleteEquipment(where: EquipmentWhereUniqueInput!): Equipment
+  deleteAsset(where: AssetWhereUniqueInput!): Asset
+  deleteCustomer(where: CustomerWhereUniqueInput!): Customer
+  deleteLocation(where: LocationWhereUniqueInput!): Location
+  deleteDiagnosticProcedure(where: DiagnosticProcedureWhereUniqueInput!): DiagnosticProcedure
   deleteUserGroup(where: UserGroupWhereUniqueInput!): UserGroup
   deleteUser(where: UserWhereUniqueInput!): User
+  deleteDiagnosticNode(where: DiagnosticNodeWhereUniqueInput!): DiagnosticNode
   deleteNote(where: NoteWhereUniqueInput!): Note
-  upsertAsset(where: AssetWhereUniqueInput!, create: AssetCreateInput!, update: AssetUpdateInput!): Asset!
-  upsertLocation(where: LocationWhereUniqueInput!, create: LocationCreateInput!, update: LocationUpdateInput!): Location!
-  upsertDiagnosticProcedure(where: DiagnosticProcedureWhereUniqueInput!, create: DiagnosticProcedureCreateInput!, update: DiagnosticProcedureUpdateInput!): DiagnosticProcedure!
-  upsertDiagnosticNode(where: DiagnosticNodeWhereUniqueInput!, create: DiagnosticNodeCreateInput!, update: DiagnosticNodeUpdateInput!): DiagnosticNode!
-  upsertCustomer(where: CustomerWhereUniqueInput!, create: CustomerCreateInput!, update: CustomerUpdateInput!): Customer!
   upsertCategory(where: CategoryWhereUniqueInput!, create: CategoryCreateInput!, update: CategoryUpdateInput!): Category!
   upsertEquipment(where: EquipmentWhereUniqueInput!, create: EquipmentCreateInput!, update: EquipmentUpdateInput!): Equipment!
+  upsertAsset(where: AssetWhereUniqueInput!, create: AssetCreateInput!, update: AssetUpdateInput!): Asset!
+  upsertCustomer(where: CustomerWhereUniqueInput!, create: CustomerCreateInput!, update: CustomerUpdateInput!): Customer!
+  upsertLocation(where: LocationWhereUniqueInput!, create: LocationCreateInput!, update: LocationUpdateInput!): Location!
+  upsertDiagnosticProcedure(where: DiagnosticProcedureWhereUniqueInput!, create: DiagnosticProcedureCreateInput!, update: DiagnosticProcedureUpdateInput!): DiagnosticProcedure!
   upsertUserGroup(where: UserGroupWhereUniqueInput!, create: UserGroupCreateInput!, update: UserGroupUpdateInput!): UserGroup!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertDiagnosticNode(where: DiagnosticNodeWhereUniqueInput!, create: DiagnosticNodeCreateInput!, update: DiagnosticNodeUpdateInput!): DiagnosticNode!
   upsertNote(where: NoteWhereUniqueInput!, create: NoteCreateInput!, update: NoteUpdateInput!): Note!
-  updateManyAssets(data: AssetUpdateInput!, where: AssetWhereInput): BatchPayload!
-  updateManyLocations(data: LocationUpdateInput!, where: LocationWhereInput): BatchPayload!
-  updateManyDiagnosticProcedures(data: DiagnosticProcedureUpdateInput!, where: DiagnosticProcedureWhereInput): BatchPayload!
-  updateManyDiagnosticNodes(data: DiagnosticNodeUpdateInput!, where: DiagnosticNodeWhereInput): BatchPayload!
-  updateManyCustomers(data: CustomerUpdateInput!, where: CustomerWhereInput): BatchPayload!
   updateManyCategories(data: CategoryUpdateInput!, where: CategoryWhereInput): BatchPayload!
   updateManyEquipments(data: EquipmentUpdateInput!, where: EquipmentWhereInput): BatchPayload!
+  updateManyAssets(data: AssetUpdateInput!, where: AssetWhereInput): BatchPayload!
+  updateManyCustomers(data: CustomerUpdateInput!, where: CustomerWhereInput): BatchPayload!
+  updateManyLocations(data: LocationUpdateInput!, where: LocationWhereInput): BatchPayload!
+  updateManyDiagnosticProcedures(data: DiagnosticProcedureUpdateInput!, where: DiagnosticProcedureWhereInput): BatchPayload!
   updateManyUserGroups(data: UserGroupUpdateInput!, where: UserGroupWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  updateManyDiagnosticNodes(data: DiagnosticNodeUpdateInput!, where: DiagnosticNodeWhereInput): BatchPayload!
   updateManyNotes(data: NoteUpdateInput!, where: NoteWhereInput): BatchPayload!
-  deleteManyAssets(where: AssetWhereInput): BatchPayload!
-  deleteManyLocations(where: LocationWhereInput): BatchPayload!
-  deleteManyDiagnosticProcedures(where: DiagnosticProcedureWhereInput): BatchPayload!
-  deleteManyDiagnosticNodes(where: DiagnosticNodeWhereInput): BatchPayload!
-  deleteManyCustomers(where: CustomerWhereInput): BatchPayload!
   deleteManyCategories(where: CategoryWhereInput): BatchPayload!
   deleteManyEquipments(where: EquipmentWhereInput): BatchPayload!
+  deleteManyAssets(where: AssetWhereInput): BatchPayload!
+  deleteManyCustomers(where: CustomerWhereInput): BatchPayload!
+  deleteManyLocations(where: LocationWhereInput): BatchPayload!
+  deleteManyDiagnosticProcedures(where: DiagnosticProcedureWhereInput): BatchPayload!
   deleteManyUserGroups(where: UserGroupWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyDiagnosticNodes(where: DiagnosticNodeWhereInput): BatchPayload!
   deleteManyNotes(where: NoteWhereInput): BatchPayload!
 }
 
@@ -2562,35 +2751,35 @@ type PageInfo {
 }
 
 type Query {
-  assets(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Asset]!
-  locations(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Location]!
-  diagnosticProcedures(where: DiagnosticProcedureWhereInput, orderBy: DiagnosticProcedureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DiagnosticProcedure]!
-  diagnosticNodes(where: DiagnosticNodeWhereInput, orderBy: DiagnosticNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DiagnosticNode]!
-  customers(where: CustomerWhereInput, orderBy: CustomerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Customer]!
   categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category]!
   equipments(where: EquipmentWhereInput, orderBy: EquipmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Equipment]!
+  assets(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Asset]!
+  customers(where: CustomerWhereInput, orderBy: CustomerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Customer]!
+  locations(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Location]!
+  diagnosticProcedures(where: DiagnosticProcedureWhereInput, orderBy: DiagnosticProcedureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DiagnosticProcedure]!
   userGroups(where: UserGroupWhereInput, orderBy: UserGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserGroup]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  diagnosticNodes(where: DiagnosticNodeWhereInput, orderBy: DiagnosticNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DiagnosticNode]!
   notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note]!
-  asset(where: AssetWhereUniqueInput!): Asset
-  location(where: LocationWhereUniqueInput!): Location
-  diagnosticProcedure(where: DiagnosticProcedureWhereUniqueInput!): DiagnosticProcedure
-  diagnosticNode(where: DiagnosticNodeWhereUniqueInput!): DiagnosticNode
-  customer(where: CustomerWhereUniqueInput!): Customer
   category(where: CategoryWhereUniqueInput!): Category
   equipment(where: EquipmentWhereUniqueInput!): Equipment
+  asset(where: AssetWhereUniqueInput!): Asset
+  customer(where: CustomerWhereUniqueInput!): Customer
+  location(where: LocationWhereUniqueInput!): Location
+  diagnosticProcedure(where: DiagnosticProcedureWhereUniqueInput!): DiagnosticProcedure
   userGroup(where: UserGroupWhereUniqueInput!): UserGroup
   user(where: UserWhereUniqueInput!): User
+  diagnosticNode(where: DiagnosticNodeWhereUniqueInput!): DiagnosticNode
   note(where: NoteWhereUniqueInput!): Note
-  assetsConnection(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AssetConnection!
-  locationsConnection(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LocationConnection!
-  diagnosticProceduresConnection(where: DiagnosticProcedureWhereInput, orderBy: DiagnosticProcedureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DiagnosticProcedureConnection!
-  diagnosticNodesConnection(where: DiagnosticNodeWhereInput, orderBy: DiagnosticNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DiagnosticNodeConnection!
-  customersConnection(where: CustomerWhereInput, orderBy: CustomerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CustomerConnection!
   categoriesConnection(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CategoryConnection!
   equipmentsConnection(where: EquipmentWhereInput, orderBy: EquipmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EquipmentConnection!
+  assetsConnection(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AssetConnection!
+  customersConnection(where: CustomerWhereInput, orderBy: CustomerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CustomerConnection!
+  locationsConnection(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LocationConnection!
+  diagnosticProceduresConnection(where: DiagnosticProcedureWhereInput, orderBy: DiagnosticProcedureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DiagnosticProcedureConnection!
   userGroupsConnection(where: UserGroupWhereInput, orderBy: UserGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserGroupConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  diagnosticNodesConnection(where: DiagnosticNodeWhereInput, orderBy: DiagnosticNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DiagnosticNodeConnection!
   notesConnection(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NoteConnection!
 
   """Fetches an object given its ID"""
@@ -2601,15 +2790,15 @@ type Query {
 }
 
 type Subscription {
-  asset(where: AssetSubscriptionWhereInput): AssetSubscriptionPayload
-  location(where: LocationSubscriptionWhereInput): LocationSubscriptionPayload
-  diagnosticProcedure(where: DiagnosticProcedureSubscriptionWhereInput): DiagnosticProcedureSubscriptionPayload
-  diagnosticNode(where: DiagnosticNodeSubscriptionWhereInput): DiagnosticNodeSubscriptionPayload
-  customer(where: CustomerSubscriptionWhereInput): CustomerSubscriptionPayload
   category(where: CategorySubscriptionWhereInput): CategorySubscriptionPayload
   equipment(where: EquipmentSubscriptionWhereInput): EquipmentSubscriptionPayload
+  asset(where: AssetSubscriptionWhereInput): AssetSubscriptionPayload
+  customer(where: CustomerSubscriptionWhereInput): CustomerSubscriptionPayload
+  location(where: LocationSubscriptionWhereInput): LocationSubscriptionPayload
+  diagnosticProcedure(where: DiagnosticProcedureSubscriptionWhereInput): DiagnosticProcedureSubscriptionPayload
   userGroup(where: UserGroupSubscriptionWhereInput): UserGroupSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  diagnosticNode(where: DiagnosticNodeSubscriptionWhereInput): DiagnosticNodeSubscriptionPayload
   note(where: NoteSubscriptionWhereInput): NoteSubscriptionPayload
 }
 
@@ -2620,7 +2809,7 @@ type User implements Node {
   password: String!
   notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
   groups(where: UserGroupWhereInput, orderBy: UserGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserGroup!]
-  defaultGroup(where: UserGroupWhereInput): UserGroup!
+  defaultGroup(where: UserGroupWhereInput): UserGroup
 }
 
 """A connection to a list of items."""
@@ -2639,7 +2828,7 @@ input UserCreateInput {
   password: String!
   notes: NoteCreateManyWithoutCreatedByInput
   groups: UserGroupCreateManyWithoutUsersInput
-  defaultGroup: UserGroupCreateOneInput!
+  defaultGroup: UserGroupCreateOneInput
 }
 
 input UserCreateManyWithoutGroupsInput {
@@ -2662,7 +2851,7 @@ input UserCreateWithoutGroupsInput {
   email: String!
   password: String!
   notes: NoteCreateManyWithoutCreatedByInput
-  defaultGroup: UserGroupCreateOneInput!
+  defaultGroup: UserGroupCreateOneInput
 }
 
 input UserCreateWithoutNotesInput {
@@ -2670,7 +2859,7 @@ input UserCreateWithoutNotesInput {
   email: String!
   password: String!
   groups: UserGroupCreateManyWithoutUsersInput
-  defaultGroup: UserGroupCreateOneInput!
+  defaultGroup: UserGroupCreateOneInput
 }
 
 """An edge in a connection."""
@@ -2711,8 +2900,8 @@ input UserGroupCreateInput {
   owner: UserCreateOneInput!
   users: UserCreateManyWithoutGroupsInput
   notes: NoteCreateManyInput
-  customers: CustomerCreateManyInput
-  categories: CategoryCreateManyInput
+  customers: CustomerCreateManyWithoutGroupInput
+  categories: CategoryCreateManyWithoutGroupInput
 }
 
 input UserGroupCreateManyWithoutUsersInput {
@@ -2725,14 +2914,44 @@ input UserGroupCreateOneInput {
   connect: UserGroupWhereUniqueInput
 }
 
+input UserGroupCreateOneWithoutCategoriesInput {
+  create: UserGroupCreateWithoutCategoriesInput
+  connect: UserGroupWhereUniqueInput
+}
+
+input UserGroupCreateOneWithoutCustomersInput {
+  create: UserGroupCreateWithoutCustomersInput
+  connect: UserGroupWhereUniqueInput
+}
+
+input UserGroupCreateWithoutCategoriesInput {
+  name: String!
+  description: String
+  personalGroup: Boolean
+  owner: UserCreateOneInput!
+  users: UserCreateManyWithoutGroupsInput
+  notes: NoteCreateManyInput
+  customers: CustomerCreateManyWithoutGroupInput
+}
+
+input UserGroupCreateWithoutCustomersInput {
+  name: String!
+  description: String
+  personalGroup: Boolean
+  owner: UserCreateOneInput!
+  users: UserCreateManyWithoutGroupsInput
+  notes: NoteCreateManyInput
+  categories: CategoryCreateManyWithoutGroupInput
+}
+
 input UserGroupCreateWithoutUsersInput {
   name: String!
   description: String
   personalGroup: Boolean
   owner: UserCreateOneInput!
   notes: NoteCreateManyInput
-  customers: CustomerCreateManyInput
-  categories: CategoryCreateManyInput
+  customers: CustomerCreateManyWithoutGroupInput
+  categories: CategoryCreateManyWithoutGroupInput
 }
 
 """An edge in a connection."""
@@ -2812,8 +3031,8 @@ input UserGroupUpdateDataInput {
   owner: UserUpdateOneInput
   users: UserUpdateManyWithoutGroupsInput
   notes: NoteUpdateManyInput
-  customers: CustomerUpdateManyInput
-  categories: CategoryUpdateManyInput
+  customers: CustomerUpdateManyWithoutGroupInput
+  categories: CategoryUpdateManyWithoutGroupInput
 }
 
 input UserGroupUpdateInput {
@@ -2823,8 +3042,8 @@ input UserGroupUpdateInput {
   owner: UserUpdateOneInput
   users: UserUpdateManyWithoutGroupsInput
   notes: NoteUpdateManyInput
-  customers: CustomerUpdateManyInput
-  categories: CategoryUpdateManyInput
+  customers: CustomerUpdateManyWithoutGroupInput
+  categories: CategoryUpdateManyWithoutGroupInput
 }
 
 input UserGroupUpdateManyWithoutUsersInput {
@@ -2839,9 +3058,46 @@ input UserGroupUpdateManyWithoutUsersInput {
 input UserGroupUpdateOneInput {
   create: UserGroupCreateInput
   connect: UserGroupWhereUniqueInput
+  disconnect: Boolean
   delete: Boolean
   update: UserGroupUpdateDataInput
   upsert: UserGroupUpsertNestedInput
+}
+
+input UserGroupUpdateOneWithoutCategoriesInput {
+  create: UserGroupCreateWithoutCategoriesInput
+  connect: UserGroupWhereUniqueInput
+  delete: Boolean
+  update: UserGroupUpdateWithoutCategoriesDataInput
+  upsert: UserGroupUpsertWithoutCategoriesInput
+}
+
+input UserGroupUpdateOneWithoutCustomersInput {
+  create: UserGroupCreateWithoutCustomersInput
+  connect: UserGroupWhereUniqueInput
+  delete: Boolean
+  update: UserGroupUpdateWithoutCustomersDataInput
+  upsert: UserGroupUpsertWithoutCustomersInput
+}
+
+input UserGroupUpdateWithoutCategoriesDataInput {
+  name: String
+  description: String
+  personalGroup: Boolean
+  owner: UserUpdateOneInput
+  users: UserUpdateManyWithoutGroupsInput
+  notes: NoteUpdateManyInput
+  customers: CustomerUpdateManyWithoutGroupInput
+}
+
+input UserGroupUpdateWithoutCustomersDataInput {
+  name: String
+  description: String
+  personalGroup: Boolean
+  owner: UserUpdateOneInput
+  users: UserUpdateManyWithoutGroupsInput
+  notes: NoteUpdateManyInput
+  categories: CategoryUpdateManyWithoutGroupInput
 }
 
 input UserGroupUpdateWithoutUsersDataInput {
@@ -2850,8 +3106,8 @@ input UserGroupUpdateWithoutUsersDataInput {
   personalGroup: Boolean
   owner: UserUpdateOneInput
   notes: NoteUpdateManyInput
-  customers: CustomerUpdateManyInput
-  categories: CategoryUpdateManyInput
+  customers: CustomerUpdateManyWithoutGroupInput
+  categories: CategoryUpdateManyWithoutGroupInput
 }
 
 input UserGroupUpdateWithWhereUniqueWithoutUsersInput {
@@ -2862,6 +3118,16 @@ input UserGroupUpdateWithWhereUniqueWithoutUsersInput {
 input UserGroupUpsertNestedInput {
   update: UserGroupUpdateDataInput!
   create: UserGroupCreateInput!
+}
+
+input UserGroupUpsertWithoutCategoriesInput {
+  update: UserGroupUpdateWithoutCategoriesDataInput!
+  create: UserGroupCreateWithoutCategoriesInput!
+}
+
+input UserGroupUpsertWithoutCustomersInput {
+  update: UserGroupUpdateWithoutCustomersDataInput!
+  create: UserGroupCreateWithoutCustomersInput!
 }
 
 input UserGroupUpsertWithWhereUniqueWithoutUsersInput {

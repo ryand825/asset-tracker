@@ -1,4 +1,4 @@
 /node_modules
+/client/node_modules
 /dist
-/src/config/keys_dev.ts
 /.env.dev

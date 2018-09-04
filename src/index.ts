@@ -1,26 +1,38 @@
-const { GraphQLServer } = require("graphql-yoga");
+import { GraphQLServer } from "graphql-yoga";
+import { Prisma } from "prisma-binding";
+
+import * as AuthPayload from "./resolvers/AuthPayload";
+import * as Query from "./resolvers/Query";
+import Mutation from "./resolvers/Mutation";
 
 if (process.env.NODE_ENV !== "production") {
-  require("dotenv").load();
+  require("dotenv").config({ path: ".env.dev" });
 }
 
-// 1
-const typeDefs = `
-type Query {
-  info: String!
-}
-`;
+const PORT = process.env.PORT || 4000;
 
-// 2
+// const Authentication = require("./resolvers/Authentication");
+
 const resolvers = {
-  Query: {
-    info: () => `This is the API of a Hackernews Clone`
-  }
+  AuthPayload,
+  Query,
+  Mutation
 };
 
 // 3
 const server = new GraphQLServer({
   typeDefs: "./src/schema.graphql",
-  resolvers
+  resolvers,
+  context: req => ({
+    ...req,
+    db: new Prisma({
+      typeDefs: "src/generated/prisma.graphql",
+      endpoint: process.env.PRISMA_ENDPOINT,
+      secret: process.env.PRISMA_SECRET,
+      debug: true
+    })
+  })
 });
-server.start(() => console.log(`Server is running on http://localhost:4000`));
+server.start({ port: PORT }, () =>
+  console.log(`Server is running on port ${PORT}`)
+);
