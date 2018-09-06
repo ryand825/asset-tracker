@@ -3,6 +3,8 @@
 type Query {
   info: String!
   getCurrentUser: User
+  getLatestUpdates(last: Int, groupId: ID!): Latest
+  getCustomersFromGroup(groupId: ID!): [Customer]
 }
 
 type Mutation {
@@ -35,4 +37,10 @@ type User {
 type AuthPayload {
   token: String
   user: User
+}
+
+type Latest {
+  customers: [Customer]
+  locations: [Location]
+  assets: [Asset]
 }

@@ -18,18 +18,21 @@ type UserGroup {
   notes: [Note!]!
   customers: [Customer!]!
   categories: [Category!]!
+  updatedAt: DateTime!
 }
 
 type Note {
   id: ID! @unique
   createdAt: DateTime!
-  createdBy: User!
+  updatedAt: DateTime!
   content: String!
   archived: Boolean! @default(value: "false")
 }
 
 type Category {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   description: String!
   equipment: [Equipment!]!
@@ -39,6 +42,8 @@ type Category {
 
 type Equipment {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   description: String!
   model: String!
@@ -49,6 +54,8 @@ type Equipment {
 
 type Asset {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   serial: String!
   description: String!
   location: Location!
@@ -58,6 +65,8 @@ type Asset {
 
 type Customer {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   notes: [Note!]!
   locations: [Location!]!
@@ -66,6 +75,8 @@ type Customer {
 
 type Location {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   address: String!
   assets: [Asset!]!
@@ -75,6 +86,8 @@ type Location {
 
 type DiagnosticProcedure {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   createdBy: User!
   category: Category!
   equipment: Equipment
@@ -86,6 +99,9 @@ type DiagnosticProcedure {
 
 type DiagnosticNode {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdBy: User!
   procedure: DiagnosticProcedure! @relation(name: "DiagnosticToNode")
   answerNodes: [DiagnosticNode!]! @relation(name: "AnswerNode")
   answer: String!

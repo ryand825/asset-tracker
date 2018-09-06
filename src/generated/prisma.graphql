@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/ryan-a5caf5/asset-tracker/dev
-# timestamp: Mon Sep 03 2018 16:32:35 GMT-0600 (Mountain Daylight Time)
+# timestamp: Tue Sep 04 2018 06:40:50 GMT-0600 (Mountain Daylight Time)
 
 type AggregateAsset {
   count: Int!
@@ -43,6 +43,8 @@ type AggregateUserGroup {
 
 type Asset implements Node {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   serial: String!
   description: String!
   location(where: LocationWhereInput): Location!
@@ -104,18 +106,20 @@ type AssetEdge {
 enum AssetOrderByInput {
   id_ASC
   id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   serial_ASC
   serial_DESC
   description_ASC
   description_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type AssetPreviousValues {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   serial: String!
   description: String!
 }
@@ -270,6 +274,50 @@ input AssetWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   serial: String
 
   """All values that are not equal to given value."""
@@ -368,6 +416,8 @@ type BatchPayload {
 
 type Category implements Node {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   description: String!
   equipment(where: EquipmentWhereInput, orderBy: EquipmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Equipment!]
@@ -441,18 +491,20 @@ type CategoryEdge {
 enum CategoryOrderByInput {
   id_ASC
   id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   name_ASC
   name_DESC
   description_ASC
   description_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type CategoryPreviousValues {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   description: String!
 }
@@ -620,6 +672,50 @@ input CategoryWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   name: String
 
   """All values that are not equal to given value."""
@@ -715,6 +811,8 @@ input CategoryWhereUniqueInput {
 
 type Customer implements Node {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
   locations(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Location!]
@@ -772,16 +870,18 @@ type CustomerEdge {
 enum CustomerOrderByInput {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
-  updatedAt_ASC
-  updatedAt_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  name_ASC
+  name_DESC
 }
 
 type CustomerPreviousValues {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
 }
 
@@ -925,6 +1025,50 @@ input CustomerWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   name: String
 
   """All values that are not equal to given value."""
@@ -982,6 +1126,9 @@ scalar DateTime
 
 type DiagnosticNode implements Node {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdBy(where: UserWhereInput): User!
   procedure(where: DiagnosticProcedureWhereInput): DiagnosticProcedure!
   answerNodes(where: DiagnosticNodeWhereInput, orderBy: DiagnosticNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DiagnosticNode!]
   answer: String!
@@ -1003,6 +1150,7 @@ input DiagnosticNodeCreateInput {
   answer: String!
   content: String!
   resolution: Boolean
+  createdBy: UserCreateOneInput!
   procedure: DiagnosticProcedureCreateOneWithoutStartNodeInput!
   answerNodes: DiagnosticNodeCreateManyInput
 }
@@ -1021,6 +1169,7 @@ input DiagnosticNodeCreateWithoutProcedureInput {
   answer: String!
   content: String!
   resolution: Boolean
+  createdBy: UserCreateOneInput!
   answerNodes: DiagnosticNodeCreateManyInput
 }
 
@@ -1036,20 +1185,22 @@ type DiagnosticNodeEdge {
 enum DiagnosticNodeOrderByInput {
   id_ASC
   id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   answer_ASC
   answer_DESC
   content_ASC
   content_DESC
   resolution_ASC
   resolution_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type DiagnosticNodePreviousValues {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   answer: String!
   content: String!
   resolution: Boolean!
@@ -1098,6 +1249,7 @@ input DiagnosticNodeUpdateDataInput {
   answer: String
   content: String
   resolution: Boolean
+  createdBy: UserUpdateOneInput
   procedure: DiagnosticProcedureUpdateOneWithoutStartNodeInput
   answerNodes: DiagnosticNodeUpdateManyInput
 }
@@ -1106,6 +1258,7 @@ input DiagnosticNodeUpdateInput {
   answer: String
   content: String
   resolution: Boolean
+  createdBy: UserUpdateOneInput
   procedure: DiagnosticProcedureUpdateOneWithoutStartNodeInput
   answerNodes: DiagnosticNodeUpdateManyInput
 }
@@ -1131,6 +1284,7 @@ input DiagnosticNodeUpdateWithoutProcedureDataInput {
   answer: String
   content: String
   resolution: Boolean
+  createdBy: UserUpdateOneInput
   answerNodes: DiagnosticNodeUpdateManyInput
 }
 
@@ -1199,6 +1353,50 @@ input DiagnosticNodeWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   answer: String
 
   """All values that are not equal to given value."""
@@ -1283,6 +1481,7 @@ input DiagnosticNodeWhereInput {
 
   """All values that are not equal to given value."""
   resolution_not: Boolean
+  createdBy: UserWhereInput
   procedure: DiagnosticProcedureWhereInput
   answerNodes_every: DiagnosticNodeWhereInput
   answerNodes_some: DiagnosticNodeWhereInput
@@ -1295,6 +1494,8 @@ input DiagnosticNodeWhereUniqueInput {
 
 type DiagnosticProcedure implements Node {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   createdBy(where: UserWhereInput): User!
   category(where: CategoryWhereInput): Category!
   equipment(where: EquipmentWhereInput): Equipment
@@ -1373,18 +1574,20 @@ type DiagnosticProcedureEdge {
 enum DiagnosticProcedureOrderByInput {
   id_ASC
   id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   description_ASC
   description_DESC
   name_ASC
   name_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type DiagnosticProcedurePreviousValues {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   description: String
   name: String!
 }
@@ -1563,6 +1766,50 @@ input DiagnosticProcedureWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   description: String
 
   """All values that are not equal to given value."""
@@ -1655,6 +1902,8 @@ input DiagnosticProcedureWhereUniqueInput {
 
 type Equipment implements Node {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   description: String!
   model: String!
@@ -1733,20 +1982,22 @@ type EquipmentEdge {
 enum EquipmentOrderByInput {
   id_ASC
   id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   name_ASC
   name_DESC
   description_ASC
   description_DESC
   model_ASC
   model_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type EquipmentPreviousValues {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   description: String!
   model: String!
@@ -1920,6 +2171,50 @@ input EquipmentWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   name: String
 
   """All values that are not equal to given value."""
@@ -2055,6 +2350,8 @@ input EquipmentWhereUniqueInput {
 
 type Location implements Node {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   address: String!
   assets(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Asset!]
@@ -2116,18 +2413,20 @@ type LocationEdge {
 enum LocationOrderByInput {
   id_ASC
   id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   name_ASC
   name_DESC
   address_ASC
   address_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type LocationPreviousValues {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   address: String!
 }
@@ -2275,6 +2574,50 @@ input LocationWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   name: String
 
   """All values that are not equal to given value."""
@@ -2452,7 +2795,7 @@ interface Node {
 type Note implements Node {
   id: ID!
   createdAt: DateTime!
-  createdBy(where: UserWhereInput): User!
+  updatedAt: DateTime!
   content: String!
   archived: Boolean!
 }
@@ -2470,22 +2813,11 @@ type NoteConnection {
 input NoteCreateInput {
   content: String!
   archived: Boolean
-  createdBy: UserCreateOneWithoutNotesInput!
 }
 
 input NoteCreateManyInput {
   create: [NoteCreateInput!]
   connect: [NoteWhereUniqueInput!]
-}
-
-input NoteCreateManyWithoutCreatedByInput {
-  create: [NoteCreateWithoutCreatedByInput!]
-  connect: [NoteWhereUniqueInput!]
-}
-
-input NoteCreateWithoutCreatedByInput {
-  content: String!
-  archived: Boolean
 }
 
 """An edge in a connection."""
@@ -2502,17 +2834,18 @@ enum NoteOrderByInput {
   id_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   content_ASC
   content_DESC
   archived_ASC
   archived_DESC
-  updatedAt_ASC
-  updatedAt_DESC
 }
 
 type NotePreviousValues {
   id: ID!
   createdAt: DateTime!
+  updatedAt: DateTime!
   content: String!
   archived: Boolean!
 }
@@ -2559,13 +2892,11 @@ input NoteSubscriptionWhereInput {
 input NoteUpdateDataInput {
   content: String
   archived: Boolean
-  createdBy: UserUpdateOneWithoutNotesInput
 }
 
 input NoteUpdateInput {
   content: String
   archived: Boolean
-  createdBy: UserUpdateOneWithoutNotesInput
 }
 
 input NoteUpdateManyInput {
@@ -2577,40 +2908,15 @@ input NoteUpdateManyInput {
   upsert: [NoteUpsertWithWhereUniqueNestedInput!]
 }
 
-input NoteUpdateManyWithoutCreatedByInput {
-  create: [NoteCreateWithoutCreatedByInput!]
-  connect: [NoteWhereUniqueInput!]
-  disconnect: [NoteWhereUniqueInput!]
-  delete: [NoteWhereUniqueInput!]
-  update: [NoteUpdateWithWhereUniqueWithoutCreatedByInput!]
-  upsert: [NoteUpsertWithWhereUniqueWithoutCreatedByInput!]
-}
-
-input NoteUpdateWithoutCreatedByDataInput {
-  content: String
-  archived: Boolean
-}
-
 input NoteUpdateWithWhereUniqueNestedInput {
   where: NoteWhereUniqueInput!
   data: NoteUpdateDataInput!
-}
-
-input NoteUpdateWithWhereUniqueWithoutCreatedByInput {
-  where: NoteWhereUniqueInput!
-  data: NoteUpdateWithoutCreatedByDataInput!
 }
 
 input NoteUpsertWithWhereUniqueNestedInput {
   where: NoteWhereUniqueInput!
   update: NoteUpdateDataInput!
   create: NoteCreateInput!
-}
-
-input NoteUpsertWithWhereUniqueWithoutCreatedByInput {
-  where: NoteWhereUniqueInput!
-  update: NoteUpdateWithoutCreatedByDataInput!
-  create: NoteCreateWithoutCreatedByInput!
 }
 
 input NoteWhereInput {
@@ -2684,6 +2990,28 @@ input NoteWhereInput {
 
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   content: String
 
   """All values that are not equal to given value."""
@@ -2728,7 +3056,6 @@ input NoteWhereInput {
 
   """All values that are not equal to given value."""
   archived_not: Boolean
-  createdBy: UserWhereInput
 }
 
 input NoteWhereUniqueInput {
@@ -2826,7 +3153,7 @@ input UserCreateInput {
   name: String!
   email: String!
   password: String!
-  notes: NoteCreateManyWithoutCreatedByInput
+  notes: NoteCreateManyInput
   groups: UserGroupCreateManyWithoutUsersInput
   defaultGroup: UserGroupCreateOneInput
 }
@@ -2841,24 +3168,11 @@ input UserCreateOneInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutNotesInput {
-  create: UserCreateWithoutNotesInput
-  connect: UserWhereUniqueInput
-}
-
 input UserCreateWithoutGroupsInput {
   name: String!
   email: String!
   password: String!
-  notes: NoteCreateManyWithoutCreatedByInput
-  defaultGroup: UserGroupCreateOneInput
-}
-
-input UserCreateWithoutNotesInput {
-  name: String!
-  email: String!
-  password: String!
-  groups: UserGroupCreateManyWithoutUsersInput
+  notes: NoteCreateManyInput
   defaultGroup: UserGroupCreateOneInput
 }
 
@@ -2881,6 +3195,7 @@ type UserGroup implements Node {
   notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
   customers(where: CustomerWhereInput, orderBy: CustomerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Customer!]
   categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category!]
+  updatedAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -2983,6 +3298,7 @@ type UserGroupPreviousValues {
   name: String!
   description: String
   personalGroup: Boolean!
+  updatedAt: DateTime!
 }
 
 type UserGroupSubscriptionPayload {
@@ -3269,6 +3585,28 @@ input UserGroupWhereInput {
 
   """All values that are not equal to given value."""
   personalGroup_not: Boolean
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   owner: UserWhereInput
   users_every: UserWhereInput
   users_some: UserWhereInput
@@ -3353,7 +3691,7 @@ input UserUpdateDataInput {
   name: String
   email: String
   password: String
-  notes: NoteUpdateManyWithoutCreatedByInput
+  notes: NoteUpdateManyInput
   groups: UserGroupUpdateManyWithoutUsersInput
   defaultGroup: UserGroupUpdateOneInput
 }
@@ -3362,7 +3700,7 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
-  notes: NoteUpdateManyWithoutCreatedByInput
+  notes: NoteUpdateManyInput
   groups: UserGroupUpdateManyWithoutUsersInput
   defaultGroup: UserGroupUpdateOneInput
 }
@@ -3384,27 +3722,11 @@ input UserUpdateOneInput {
   upsert: UserUpsertNestedInput
 }
 
-input UserUpdateOneWithoutNotesInput {
-  create: UserCreateWithoutNotesInput
-  connect: UserWhereUniqueInput
-  delete: Boolean
-  update: UserUpdateWithoutNotesDataInput
-  upsert: UserUpsertWithoutNotesInput
-}
-
 input UserUpdateWithoutGroupsDataInput {
   name: String
   email: String
   password: String
-  notes: NoteUpdateManyWithoutCreatedByInput
-  defaultGroup: UserGroupUpdateOneInput
-}
-
-input UserUpdateWithoutNotesDataInput {
-  name: String
-  email: String
-  password: String
-  groups: UserGroupUpdateManyWithoutUsersInput
+  notes: NoteUpdateManyInput
   defaultGroup: UserGroupUpdateOneInput
 }
 
@@ -3416,11 +3738,6 @@ input UserUpdateWithWhereUniqueWithoutGroupsInput {
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
-}
-
-input UserUpsertWithoutNotesInput {
-  update: UserUpdateWithoutNotesDataInput!
-  create: UserCreateWithoutNotesInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutGroupsInput {

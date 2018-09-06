@@ -15,7 +15,8 @@ const client = new ApolloClient({
   clientState: {
     defaults: defaultState,
     resolvers: {}
-  }
+  },
+  headers: { Authorization: localStorage.getItem("jwtToken") }
 });
 
 ReactDOM.render(
