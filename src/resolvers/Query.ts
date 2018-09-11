@@ -4,6 +4,10 @@ async function getCurrentUser(parents, args, context, info) {
   const userId = getUserId(context);
   if (!userId) throw new Error("Not Logged In");
   const user = await context.db.query.user({ where: { id: userId } }, info);
+  console.log("#######################", user);
+  if (!user.default) {
+    console.log("no default");
+  }
 
   return user;
 }
@@ -52,12 +56,14 @@ async function getCustomersFromGroup(parents, args, context, info) {
   const userId = getUserId(context);
   if (!userId) throw new Error("Not Logged In");
 
-  return await context.db.query.customers(
+  const customers = await context.db.query.customers(
     {
       where: { group: { id: args.groupId, users_some: { id: userId } } }
     },
-    `{id name}`
+    `{id name locations{id}}`
   );
+
+  return customers;
 }
 
 export { getCustomersFromGroup, getCurrentUser, getLatestUpdates };

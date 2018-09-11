@@ -24,12 +24,26 @@ async function register(parent, args, context, info) {
 }
 
 async function login(parent, args, context, info) {
-  const user = await context.db.query.user(
+  let user = await context.db.query.user(
     { where: { email: args.email } },
-    `{ id password name}`
+    `{ id password name groups{id} defaultGroup{id}}`
   );
   if (!user) {
     throw new Error("Email not found");
+  }
+  if (!user.defaultGroup) {
+    user = await context.db.mutation.updateUser(
+      {
+        where: { id: user.id },
+        data: {
+          defaultGroup: { connect: { id: user.groups[0].id } }
+        }
+      },
+      `{ id password name groups{id} defaultGroup{id}}`
+    );
+    console.log(
+      "#####################################updatedGroup#########################"
+    );
   }
 
   const valid = await bcrypt.compare(args.password, user.password);

@@ -4,7 +4,8 @@ const cssVar = {
   PRIMARY_DARK: "#9f0000",
   SECONDARY_COLOR: "#263238",
   SECONDARY_LIGHT: "#4f5b62",
-  SECONDARY_DARK: "#000a12"
+  SECONDARY_DARK: "#000a12",
+  FULLSCREEN: 768
 };
 
 export default cssVar;

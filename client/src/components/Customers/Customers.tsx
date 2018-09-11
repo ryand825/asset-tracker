@@ -4,25 +4,31 @@ import gql from "graphql-tag";
 
 import ListView from "../common/ListView";
 
-export interface CustomersProps {}
+export interface CustomersProps {
+  path: string;
+}
 
 export default class Customers extends React.Component<CustomersProps, any> {
   public render() {
     return (
       <Query query={CUSTOMER_QUERY}>
         {({ loading, data }) => {
-          console.log(data);
-          // const locations = data.getCurrentUser.customers.locations;
           if (loading) {
             return "loading...";
           } else {
+            console.log(data.getCustomersFromGroup);
+            const customerData = data.getCustomersFromGroup.map(
+              (customer: { id: string; name: string; locations: [] }) => {
+                return {
+                  customerName: customer.name,
+                  Locations: customer.locations.length,
+                  id: customer.id
+                };
+              }
+            );
             return (
               <>
-                <ListView
-                  listData={
-                    data.getCurrentUser.groups[0].customers[0].locations
-                  }
-                />
+                <ListView listData={customerData} />
               </>
             );
           }
@@ -34,14 +40,11 @@ export default class Customers extends React.Component<CustomersProps, any> {
 
 const CUSTOMER_QUERY = gql`
   query {
-    getCurrentUser {
-      groups {
-        customers {
-          locations {
-            name
-            address
-          }
-        }
+    getCustomersFromGroup(groupId: "cjlms583gntq40b17a9ama6ae") {
+      id
+      name
+      locations {
+        id
       }
     }
   }

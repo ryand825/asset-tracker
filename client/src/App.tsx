@@ -1,53 +1,51 @@
 import * as React from "react";
 import "./App.css";
 
-// import { Query } from "react-apollo";
-// import gql from "graphql-tag";
+import { Router } from "@reach/router";
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
 
 import NavBar from "./components/Navigation/NavBar";
 import Customers from "./components/Customers/Customers";
 
-class App extends React.Component {
+export default class App extends React.Component {
   public render() {
     return (
-      <>
-        <NavBar groups={[{ id: "hello", name: "hello" }]} />
-        <Customers />
-      </>
+      <Query query={GET_USER}>
+        {({ loading, data }) => {
+          if (loading) {
+            return "Loading";
+          } else {
+            const userData = { ...data.getCurrentUser };
+            console.log(userData);
+            return (
+              <>
+                <NavBar groups={[{ id: userData.id, name: userData.name }]} />
+                <Router>
+                  <Customers path="/customers" />
+                </Router>
+              </>
+            );
+          }
+        }}
+      </Query>
     );
   }
 }
 
-export default App;
-
-// const GET_USER = gql`
-//   query {
-//     getCurrentUser {
-//       id
-//       name
-//       groups {
-//         id
-//         name
-//       }
-//     }
-//   }
-// `;
-
-{
-  /* <Query query={GET_USER}>
-          {({ loading, data }) => {
-            const user = data.getCurrentUser;
-            if (loading) {
-              return "loading...";
-            } else {
-              return (
-                <>
-                  <NavBar groups={user.groups} />
-                  <Customers />
-                  {user.name}
-                </>
-              );
-            }
-          }}
-        </Query> */
-}
+const GET_USER = gql`
+  query {
+    getCurrentUser {
+      id
+      name
+      groups {
+        id
+        name
+      }
+      defaultGroup {
+        id
+        name
+      }
+    }
+  }
+`;
