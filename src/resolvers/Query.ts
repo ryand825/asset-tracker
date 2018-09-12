@@ -27,7 +27,7 @@ async function getLatestUpdates(parents, args, context, info) {
       last: args.last,
       orderBy: "updatedAt_ASC"
     },
-    `{id serial description}`
+    `{id serial description updatedAt}`
   );
 
   latest.customers = await context.db.query.customers(
@@ -36,7 +36,7 @@ async function getLatestUpdates(parents, args, context, info) {
       last: args.last,
       orderBy: "updatedAt_ASC"
     },
-    `{id name}`
+    `{id name updatedAt}`
   );
 
   latest.locations = await context.db.query.locations(
@@ -47,7 +47,7 @@ async function getLatestUpdates(parents, args, context, info) {
       last: args.last,
       orderBy: "updatedAt_ASC"
     },
-    `{id name}`
+    `{id name updatedAt}`
   );
   return latest;
 }

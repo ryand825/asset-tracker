@@ -6,9 +6,7 @@ import registerServiceWorker from "./registerServiceWorker";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 
-const defaultState = {
-  isEditMode: false
-};
+const defaultState = {};
 
 const client = new ApolloClient({
   uri: "http://localhost:4000",

@@ -7,21 +7,23 @@ import gql from "graphql-tag";
 
 import NavBar from "./components/Navigation/NavBar";
 import Customers from "./components/Customers/Customers";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 export default class App extends React.Component {
   public render() {
     return (
       <Query query={GET_USER}>
-        {({ loading, data }) => {
+        {({ loading, data, client }) => {
           if (loading) {
             return "Loading";
           } else {
             const userData = { ...data.getCurrentUser };
-            console.log(userData);
+            const { groups, defaultGroup } = userData;
             return (
               <>
-                <NavBar groups={[{ id: userData.id, name: userData.name }]} />
+                <NavBar groups={groups} defaultGroup={defaultGroup} />
                 <Router>
+                  <Dashboard path="/dashboard" />
                   <Customers path="/customers" />
                 </Router>
               </>

@@ -11,12 +11,14 @@ import Modal from "../common/Modal";
 import cssVar from "../../variables";
 
 export interface NavBarProps {
-  groups: [{ id: String; name: String }];
+  groups: [{ id: string; name: string }];
+  defaultGroup: { id: string; name: string };
 }
 
 export default class NavBar extends React.Component<NavBarProps, any> {
   state = {
-    menuOpen: false
+    menuOpen: false,
+    currentGroupId: ""
   };
 
   menuToggle = () => {
@@ -27,6 +29,16 @@ export default class NavBar extends React.Component<NavBarProps, any> {
 
   public render() {
     const { menuOpen } = this.state;
+    const { groups, defaultGroup } = this.props;
+
+    const groupList = groups.map(group => {
+      const { id, name } = group;
+      return (
+        <option key={`groupOption-${id}`} value={id}>
+          {name}
+        </option>
+      );
+    });
 
     return (
       <React.Fragment>
@@ -35,9 +47,9 @@ export default class NavBar extends React.Component<NavBarProps, any> {
         </Header>
         {menuOpen && <Modal onClick={this.menuToggle} />}
         <SideNav menuOpen={menuOpen}>
-          <GroupSelect>{this.props.groups[0].name} ...</GroupSelect>
+          <GroupSelect value={defaultGroup.id}>{groupList}</GroupSelect>
           <NavList>
-            <Link className="menu-item" to="/">
+            <Link className="menu-item" to="/dashboard">
               Dashboard
             </Link>
             <Link className="menu-item" to="/equipment">
@@ -91,13 +103,16 @@ const SideNav = styled<{ menuOpen: boolean }, "aside">("aside")`
   }
 `;
 
-const GroupSelect = styled.div`
+const GroupSelect = styled.select`
   background-color: ${cssVar.PRIMARY_LIGHT};
+  font-size: 18px;
   height: 40px;
   width: 220px;
   padding-top: 10px;
   padding-left: 5px;
+  border: none;
   border-bottom: 1px solid ${cssVar.PRIMARY_DARK};
+  cursor: pointer;
 `;
 
 const NavList = styled.ul`
