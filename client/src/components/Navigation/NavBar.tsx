@@ -27,6 +27,10 @@ export default class NavBar extends React.Component<NavBarProps, any> {
     });
   };
 
+  menuClose = () => {
+    if (this.state.menuOpen) this.setState({ menuOpen: false });
+  };
+
   public render() {
     const { menuOpen } = this.state;
     const { groups, defaultGroup } = this.props;
@@ -48,7 +52,7 @@ export default class NavBar extends React.Component<NavBarProps, any> {
         {menuOpen && <Modal onClick={this.menuToggle} />}
         <SideNav menuOpen={menuOpen}>
           <GroupSelect value={defaultGroup.id}>{groupList}</GroupSelect>
-          <NavList>
+          <NavList onClick={this.menuClose}>
             <Link className="menu-item" to="/dashboard">
               Dashboard
             </Link>
