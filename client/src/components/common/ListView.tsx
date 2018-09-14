@@ -38,7 +38,6 @@ export default class ListView extends React.Component<ListViewProps, any> {
     // Creates the row data
     const contentRows = dataArray.map((data, key) => {
       const evenOdd = key % 2 === 0 ? "odd" : "even";
-      console.log(evenOdd);
       let row = [];
       for (let item in data) {
         if (item === "id") {

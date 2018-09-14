@@ -2,6 +2,8 @@ import * as React from "react";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
+import DashList from "./DashList";
+
 export interface DashboardProps {
   path: string;
 }
@@ -11,7 +13,6 @@ export default class Dashboard extends React.Component<DashboardProps, any> {
     return (
       <Query query={GET_USER}>
         {({ data }) => {
-          console.log(data);
           const defaultGroupId = data.getCurrentUser.defaultGroup.id;
           return (
             <Query
@@ -23,10 +24,17 @@ export default class Dashboard extends React.Component<DashboardProps, any> {
                   return <div>Loading...</div>;
                 } else {
                   console.log(data);
+                  const {
+                    customers,
+                    assets,
+                    locations
+                  } = data.getLatestUpdates;
                   return (
-                    <div>
-                      <h3>Hello</h3>
-                    </div>
+                    <>
+                      <DashList listData={customers} />
+                      <DashList listData={locations} />
+                      <DashList listData={assets} />
+                    </>
                   );
                 }
               }}
@@ -53,19 +61,25 @@ const GET_LATEST_UPDATES = gql`
   query getLatestUpdates($groupId: ID!) {
     getLatestUpdates(groupId: $groupId, last: 5) {
       customers {
-        id
         name
         updatedAt
+        id
       }
       locations {
-        id
         name
         updatedAt
+        id
+        customer {
+          name
+        }
       }
       assets {
-        id
         serial
         updatedAt
+        id
+        equipment {
+          name
+        }
       }
     }
   }
