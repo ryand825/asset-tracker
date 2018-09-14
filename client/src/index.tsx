@@ -5,22 +5,31 @@ import "./index.css";
 import registerServiceWorker from "./registerServiceWorker";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
+import { InMemoryCache } from "apollo-cache-inmemory";
+import { persistCache } from "apollo-cache-persist";
 
+const cache = new InMemoryCache();
 const defaultState = {};
 
-const client = new ApolloClient({
-  uri: "http://localhost:4000",
-  clientState: {
-    defaults: defaultState,
-    resolvers: {}
-  },
-  headers: { Authorization: localStorage.getItem("jwtToken") }
-});
+persistCache({
+  cache,
+  storage: window.localStorage
+}).then(() => {
+  const client = new ApolloClient({
+    cache,
+    uri: "http://localhost:4000",
+    clientState: {
+      defaults: defaultState,
+      resolvers: {}
+    },
+    headers: { Authorization: localStorage.getItem("jwtToken") }
+  });
 
-ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
-  document.getElementById("root") as HTMLElement
-);
-registerServiceWorker();
+  ReactDOM.render(
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>,
+    document.getElementById("root") as HTMLElement
+  );
+  registerServiceWorker();
+});
