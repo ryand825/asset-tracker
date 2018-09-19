@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as moment from "moment";
 
 import "./DashList.css";
 
@@ -24,19 +25,17 @@ export default class DashList extends React.Component<DashListProps, any> {
 
     const list = dataArray.map((data, key) => {
       const updated = new Date(data.updatedAt);
-      const dateString = `${updated.getMonth() +
-        1}/${updated.getDate()}/${updated
-        .getFullYear()
-        .toString()
-        .slice(2)}`;
+      const timeAgo = moment(updated).fromNow();
 
       return (
         <div key={data.id} className="list-item">
           <div>
-            {data.name || `S#: ${data.serial}`}
-            <small>{parentType && ` - ${data[parentType].name}`}</small>
+            <div>{data.name || `S#: ${data.serial}`}</div>
+            <small>{parentType && `(${data[parentType].name})`}</small>
           </div>{" "}
-          <div>{dateString}</div>{" "}
+          <div>
+            <small>{timeAgo}</small>
+          </div>
         </div>
       );
     });

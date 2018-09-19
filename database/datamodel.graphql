@@ -25,6 +25,8 @@ type Note {
   id: ID! @unique
   createdAt: DateTime!
   updatedAt: DateTime!
+  createdBy: User!
+  createdIn: UserGroup!
   content: String!
   archived: Boolean! @default(value: "false")
 }

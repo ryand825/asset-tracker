@@ -9,7 +9,9 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import { persistCache } from "apollo-cache-persist";
 
 const cache = new InMemoryCache();
-const defaultState = {};
+const defaultState = {
+  defaultGroupId: ""
+};
 
 persistCache({
   cache,

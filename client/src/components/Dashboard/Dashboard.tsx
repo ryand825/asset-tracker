@@ -3,6 +3,7 @@ import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
 import DashList from "./DashList";
+import "./Dashboard.css";
 
 export interface DashboardProps {
   path: string;
@@ -31,9 +32,12 @@ export default class Dashboard extends React.Component<DashboardProps, any> {
                   } = data.getLatestUpdates;
                   return (
                     <>
-                      <DashList listData={customers} />
-                      <DashList listData={locations} />
-                      <DashList listData={assets} />
+                      <h3 className="dash-header">Recent Updates</h3>
+                      <div className="dashboard-container">
+                        <DashList listData={locations} />
+                        <DashList listData={customers} />
+                        <DashList listData={assets} />
+                      </div>
                     </>
                   );
                 }

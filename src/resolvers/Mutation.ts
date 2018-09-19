@@ -1,9 +1,11 @@
 import { register, login } from "./mutations/Auth";
+import noteMutations from "./mutations/Notes";
 import { getUserId } from "../utils";
 
 const Mutations = {
   register,
   login,
+  ...noteMutations,
   createUserGroup: (parent, args, context, info) => {
     const userId = getUserId(context);
     if (!userId) throw new Error("Not Logged In");

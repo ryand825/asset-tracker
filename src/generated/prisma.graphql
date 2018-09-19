@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/ryan-a5caf5/asset-tracker/dev
-# timestamp: Tue Sep 04 2018 06:40:50 GMT-0600 (Mountain Daylight Time)
+# timestamp: Mon Sep 17 2018 07:37:46 GMT-0600 (Mountain Daylight Time)
 
 type AggregateAsset {
   count: Int!
@@ -166,8 +166,8 @@ input AssetSubscriptionWhereInput {
 input AssetUpdateInput {
   serial: String
   description: String
-  location: LocationUpdateOneWithoutAssetsInput
-  equipment: EquipmentUpdateOneWithoutAssetsInput
+  location: LocationUpdateOneRequiredWithoutAssetsInput
+  equipment: EquipmentUpdateOneRequiredWithoutAssetsInput
   notes: NoteUpdateManyInput
 }
 
@@ -192,14 +192,14 @@ input AssetUpdateManyWithoutLocationInput {
 input AssetUpdateWithoutEquipmentDataInput {
   serial: String
   description: String
-  location: LocationUpdateOneWithoutAssetsInput
+  location: LocationUpdateOneRequiredWithoutAssetsInput
   notes: NoteUpdateManyInput
 }
 
 input AssetUpdateWithoutLocationDataInput {
   serial: String
   description: String
-  equipment: EquipmentUpdateOneWithoutAssetsInput
+  equipment: EquipmentUpdateOneRequiredWithoutAssetsInput
   notes: NoteUpdateManyInput
 }
 
@@ -553,7 +553,7 @@ input CategoryUpdateInput {
   description: String
   equipment: EquipmentUpdateManyWithoutCategoryInput
   diagnostics: DiagnosticProcedureUpdateManyWithoutCategoryInput
-  group: UserGroupUpdateOneWithoutCategoriesInput
+  group: UserGroupUpdateOneRequiredWithoutCategoriesInput
 }
 
 input CategoryUpdateManyWithoutGroupInput {
@@ -565,18 +565,16 @@ input CategoryUpdateManyWithoutGroupInput {
   upsert: [CategoryUpsertWithWhereUniqueWithoutGroupInput!]
 }
 
-input CategoryUpdateOneWithoutDiagnosticsInput {
+input CategoryUpdateOneRequiredWithoutDiagnosticsInput {
   create: CategoryCreateWithoutDiagnosticsInput
   connect: CategoryWhereUniqueInput
-  delete: Boolean
   update: CategoryUpdateWithoutDiagnosticsDataInput
   upsert: CategoryUpsertWithoutDiagnosticsInput
 }
 
-input CategoryUpdateOneWithoutEquipmentInput {
+input CategoryUpdateOneRequiredWithoutEquipmentInput {
   create: CategoryCreateWithoutEquipmentInput
   connect: CategoryWhereUniqueInput
-  delete: Boolean
   update: CategoryUpdateWithoutEquipmentDataInput
   upsert: CategoryUpsertWithoutEquipmentInput
 }
@@ -585,14 +583,14 @@ input CategoryUpdateWithoutDiagnosticsDataInput {
   name: String
   description: String
   equipment: EquipmentUpdateManyWithoutCategoryInput
-  group: UserGroupUpdateOneWithoutCategoriesInput
+  group: UserGroupUpdateOneRequiredWithoutCategoriesInput
 }
 
 input CategoryUpdateWithoutEquipmentDataInput {
   name: String
   description: String
   diagnostics: DiagnosticProcedureUpdateManyWithoutCategoryInput
-  group: UserGroupUpdateOneWithoutCategoriesInput
+  group: UserGroupUpdateOneRequiredWithoutCategoriesInput
 }
 
 input CategoryUpdateWithoutGroupDataInput {
@@ -928,7 +926,7 @@ input CustomerUpdateInput {
   name: String
   notes: NoteUpdateManyInput
   locations: LocationUpdateManyWithoutCustomerInput
-  group: UserGroupUpdateOneWithoutCustomersInput
+  group: UserGroupUpdateOneRequiredWithoutCustomersInput
 }
 
 input CustomerUpdateManyWithoutGroupInput {
@@ -940,10 +938,9 @@ input CustomerUpdateManyWithoutGroupInput {
   upsert: [CustomerUpsertWithWhereUniqueWithoutGroupInput!]
 }
 
-input CustomerUpdateOneWithoutLocationsInput {
+input CustomerUpdateOneRequiredWithoutLocationsInput {
   create: CustomerCreateWithoutLocationsInput
   connect: CustomerWhereUniqueInput
-  delete: Boolean
   update: CustomerUpdateWithoutLocationsDataInput
   upsert: CustomerUpsertWithoutLocationsInput
 }
@@ -957,7 +954,7 @@ input CustomerUpdateWithoutGroupDataInput {
 input CustomerUpdateWithoutLocationsDataInput {
   name: String
   notes: NoteUpdateManyInput
-  group: UserGroupUpdateOneWithoutCustomersInput
+  group: UserGroupUpdateOneRequiredWithoutCustomersInput
 }
 
 input CustomerUpdateWithWhereUniqueWithoutGroupInput {
@@ -1249,8 +1246,8 @@ input DiagnosticNodeUpdateDataInput {
   answer: String
   content: String
   resolution: Boolean
-  createdBy: UserUpdateOneInput
-  procedure: DiagnosticProcedureUpdateOneWithoutStartNodeInput
+  createdBy: UserUpdateOneRequiredInput
+  procedure: DiagnosticProcedureUpdateOneRequiredWithoutStartNodeInput
   answerNodes: DiagnosticNodeUpdateManyInput
 }
 
@@ -1258,8 +1255,8 @@ input DiagnosticNodeUpdateInput {
   answer: String
   content: String
   resolution: Boolean
-  createdBy: UserUpdateOneInput
-  procedure: DiagnosticProcedureUpdateOneWithoutStartNodeInput
+  createdBy: UserUpdateOneRequiredInput
+  procedure: DiagnosticProcedureUpdateOneRequiredWithoutStartNodeInput
   answerNodes: DiagnosticNodeUpdateManyInput
 }
 
@@ -1272,10 +1269,9 @@ input DiagnosticNodeUpdateManyInput {
   upsert: [DiagnosticNodeUpsertWithWhereUniqueNestedInput!]
 }
 
-input DiagnosticNodeUpdateOneWithoutProcedureInput {
+input DiagnosticNodeUpdateOneRequiredWithoutProcedureInput {
   create: DiagnosticNodeCreateWithoutProcedureInput
   connect: DiagnosticNodeWhereUniqueInput
-  delete: Boolean
   update: DiagnosticNodeUpdateWithoutProcedureDataInput
   upsert: DiagnosticNodeUpsertWithoutProcedureInput
 }
@@ -1284,7 +1280,7 @@ input DiagnosticNodeUpdateWithoutProcedureDataInput {
   answer: String
   content: String
   resolution: Boolean
-  createdBy: UserUpdateOneInput
+  createdBy: UserUpdateOneRequiredInput
   answerNodes: DiagnosticNodeUpdateManyInput
 }
 
@@ -1634,10 +1630,10 @@ input DiagnosticProcedureSubscriptionWhereInput {
 input DiagnosticProcedureUpdateInput {
   description: String
   name: String
-  createdBy: UserUpdateOneInput
-  category: CategoryUpdateOneWithoutDiagnosticsInput
+  createdBy: UserUpdateOneRequiredInput
+  category: CategoryUpdateOneRequiredWithoutDiagnosticsInput
   equipment: EquipmentUpdateOneWithoutDiagnosticsInput
-  startNode: DiagnosticNodeUpdateOneWithoutProcedureInput
+  startNode: DiagnosticNodeUpdateOneRequiredWithoutProcedureInput
 }
 
 input DiagnosticProcedureUpdateManyWithoutCategoryInput {
@@ -1658,10 +1654,9 @@ input DiagnosticProcedureUpdateManyWithoutEquipmentInput {
   upsert: [DiagnosticProcedureUpsertWithWhereUniqueWithoutEquipmentInput!]
 }
 
-input DiagnosticProcedureUpdateOneWithoutStartNodeInput {
+input DiagnosticProcedureUpdateOneRequiredWithoutStartNodeInput {
   create: DiagnosticProcedureCreateWithoutStartNodeInput
   connect: DiagnosticProcedureWhereUniqueInput
-  delete: Boolean
   update: DiagnosticProcedureUpdateWithoutStartNodeDataInput
   upsert: DiagnosticProcedureUpsertWithoutStartNodeInput
 }
@@ -1669,24 +1664,24 @@ input DiagnosticProcedureUpdateOneWithoutStartNodeInput {
 input DiagnosticProcedureUpdateWithoutCategoryDataInput {
   description: String
   name: String
-  createdBy: UserUpdateOneInput
+  createdBy: UserUpdateOneRequiredInput
   equipment: EquipmentUpdateOneWithoutDiagnosticsInput
-  startNode: DiagnosticNodeUpdateOneWithoutProcedureInput
+  startNode: DiagnosticNodeUpdateOneRequiredWithoutProcedureInput
 }
 
 input DiagnosticProcedureUpdateWithoutEquipmentDataInput {
   description: String
   name: String
-  createdBy: UserUpdateOneInput
-  category: CategoryUpdateOneWithoutDiagnosticsInput
-  startNode: DiagnosticNodeUpdateOneWithoutProcedureInput
+  createdBy: UserUpdateOneRequiredInput
+  category: CategoryUpdateOneRequiredWithoutDiagnosticsInput
+  startNode: DiagnosticNodeUpdateOneRequiredWithoutProcedureInput
 }
 
 input DiagnosticProcedureUpdateWithoutStartNodeDataInput {
   description: String
   name: String
-  createdBy: UserUpdateOneInput
-  category: CategoryUpdateOneWithoutDiagnosticsInput
+  createdBy: UserUpdateOneRequiredInput
+  category: CategoryUpdateOneRequiredWithoutDiagnosticsInput
   equipment: EquipmentUpdateOneWithoutDiagnosticsInput
 }
 
@@ -2046,7 +2041,7 @@ input EquipmentUpdateInput {
   name: String
   description: String
   model: String
-  category: CategoryUpdateOneWithoutEquipmentInput
+  category: CategoryUpdateOneRequiredWithoutEquipmentInput
   diagnostics: DiagnosticProcedureUpdateManyWithoutEquipmentInput
   assets: AssetUpdateManyWithoutEquipmentInput
 }
@@ -2060,10 +2055,9 @@ input EquipmentUpdateManyWithoutCategoryInput {
   upsert: [EquipmentUpsertWithWhereUniqueWithoutCategoryInput!]
 }
 
-input EquipmentUpdateOneWithoutAssetsInput {
+input EquipmentUpdateOneRequiredWithoutAssetsInput {
   create: EquipmentCreateWithoutAssetsInput
   connect: EquipmentWhereUniqueInput
-  delete: Boolean
   update: EquipmentUpdateWithoutAssetsDataInput
   upsert: EquipmentUpsertWithoutAssetsInput
 }
@@ -2081,7 +2075,7 @@ input EquipmentUpdateWithoutAssetsDataInput {
   name: String
   description: String
   model: String
-  category: CategoryUpdateOneWithoutEquipmentInput
+  category: CategoryUpdateOneRequiredWithoutEquipmentInput
   diagnostics: DiagnosticProcedureUpdateManyWithoutEquipmentInput
 }
 
@@ -2097,7 +2091,7 @@ input EquipmentUpdateWithoutDiagnosticsDataInput {
   name: String
   description: String
   model: String
-  category: CategoryUpdateOneWithoutEquipmentInput
+  category: CategoryUpdateOneRequiredWithoutEquipmentInput
   assets: AssetUpdateManyWithoutEquipmentInput
 }
 
@@ -2474,7 +2468,7 @@ input LocationUpdateInput {
   name: String
   address: String
   assets: AssetUpdateManyWithoutLocationInput
-  customer: CustomerUpdateOneWithoutLocationsInput
+  customer: CustomerUpdateOneRequiredWithoutLocationsInput
   notes: NoteUpdateManyInput
 }
 
@@ -2487,10 +2481,9 @@ input LocationUpdateManyWithoutCustomerInput {
   upsert: [LocationUpsertWithWhereUniqueWithoutCustomerInput!]
 }
 
-input LocationUpdateOneWithoutAssetsInput {
+input LocationUpdateOneRequiredWithoutAssetsInput {
   create: LocationCreateWithoutAssetsInput
   connect: LocationWhereUniqueInput
-  delete: Boolean
   update: LocationUpdateWithoutAssetsDataInput
   upsert: LocationUpsertWithoutAssetsInput
 }
@@ -2498,7 +2491,7 @@ input LocationUpdateOneWithoutAssetsInput {
 input LocationUpdateWithoutAssetsDataInput {
   name: String
   address: String
-  customer: CustomerUpdateOneWithoutLocationsInput
+  customer: CustomerUpdateOneRequiredWithoutLocationsInput
   notes: NoteUpdateManyInput
 }
 
@@ -2796,6 +2789,8 @@ type Note implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+  createdBy(where: UserWhereInput): User!
+  createdIn(where: UserGroupWhereInput): UserGroup!
   content: String!
   archived: Boolean!
 }
@@ -2813,11 +2808,35 @@ type NoteConnection {
 input NoteCreateInput {
   content: String!
   archived: Boolean
+  createdBy: UserCreateOneWithoutNotesInput!
+  createdIn: UserGroupCreateOneWithoutNotesInput!
 }
 
 input NoteCreateManyInput {
   create: [NoteCreateInput!]
   connect: [NoteWhereUniqueInput!]
+}
+
+input NoteCreateManyWithoutCreatedByInput {
+  create: [NoteCreateWithoutCreatedByInput!]
+  connect: [NoteWhereUniqueInput!]
+}
+
+input NoteCreateManyWithoutCreatedInInput {
+  create: [NoteCreateWithoutCreatedInInput!]
+  connect: [NoteWhereUniqueInput!]
+}
+
+input NoteCreateWithoutCreatedByInput {
+  content: String!
+  archived: Boolean
+  createdIn: UserGroupCreateOneWithoutNotesInput!
+}
+
+input NoteCreateWithoutCreatedInInput {
+  content: String!
+  archived: Boolean
+  createdBy: UserCreateOneWithoutNotesInput!
 }
 
 """An edge in a connection."""
@@ -2892,11 +2911,15 @@ input NoteSubscriptionWhereInput {
 input NoteUpdateDataInput {
   content: String
   archived: Boolean
+  createdBy: UserUpdateOneRequiredWithoutNotesInput
+  createdIn: UserGroupUpdateOneRequiredWithoutNotesInput
 }
 
 input NoteUpdateInput {
   content: String
   archived: Boolean
+  createdBy: UserUpdateOneRequiredWithoutNotesInput
+  createdIn: UserGroupUpdateOneRequiredWithoutNotesInput
 }
 
 input NoteUpdateManyInput {
@@ -2908,15 +2931,67 @@ input NoteUpdateManyInput {
   upsert: [NoteUpsertWithWhereUniqueNestedInput!]
 }
 
+input NoteUpdateManyWithoutCreatedByInput {
+  create: [NoteCreateWithoutCreatedByInput!]
+  connect: [NoteWhereUniqueInput!]
+  disconnect: [NoteWhereUniqueInput!]
+  delete: [NoteWhereUniqueInput!]
+  update: [NoteUpdateWithWhereUniqueWithoutCreatedByInput!]
+  upsert: [NoteUpsertWithWhereUniqueWithoutCreatedByInput!]
+}
+
+input NoteUpdateManyWithoutCreatedInInput {
+  create: [NoteCreateWithoutCreatedInInput!]
+  connect: [NoteWhereUniqueInput!]
+  disconnect: [NoteWhereUniqueInput!]
+  delete: [NoteWhereUniqueInput!]
+  update: [NoteUpdateWithWhereUniqueWithoutCreatedInInput!]
+  upsert: [NoteUpsertWithWhereUniqueWithoutCreatedInInput!]
+}
+
+input NoteUpdateWithoutCreatedByDataInput {
+  content: String
+  archived: Boolean
+  createdIn: UserGroupUpdateOneRequiredWithoutNotesInput
+}
+
+input NoteUpdateWithoutCreatedInDataInput {
+  content: String
+  archived: Boolean
+  createdBy: UserUpdateOneRequiredWithoutNotesInput
+}
+
 input NoteUpdateWithWhereUniqueNestedInput {
   where: NoteWhereUniqueInput!
   data: NoteUpdateDataInput!
+}
+
+input NoteUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: NoteWhereUniqueInput!
+  data: NoteUpdateWithoutCreatedByDataInput!
+}
+
+input NoteUpdateWithWhereUniqueWithoutCreatedInInput {
+  where: NoteWhereUniqueInput!
+  data: NoteUpdateWithoutCreatedInDataInput!
 }
 
 input NoteUpsertWithWhereUniqueNestedInput {
   where: NoteWhereUniqueInput!
   update: NoteUpdateDataInput!
   create: NoteCreateInput!
+}
+
+input NoteUpsertWithWhereUniqueWithoutCreatedByInput {
+  where: NoteWhereUniqueInput!
+  update: NoteUpdateWithoutCreatedByDataInput!
+  create: NoteCreateWithoutCreatedByInput!
+}
+
+input NoteUpsertWithWhereUniqueWithoutCreatedInInput {
+  where: NoteWhereUniqueInput!
+  update: NoteUpdateWithoutCreatedInDataInput!
+  create: NoteCreateWithoutCreatedInInput!
 }
 
 input NoteWhereInput {
@@ -3056,6 +3131,8 @@ input NoteWhereInput {
 
   """All values that are not equal to given value."""
   archived_not: Boolean
+  createdBy: UserWhereInput
+  createdIn: UserGroupWhereInput
 }
 
 input NoteWhereUniqueInput {
@@ -3153,7 +3230,7 @@ input UserCreateInput {
   name: String!
   email: String!
   password: String!
-  notes: NoteCreateManyInput
+  notes: NoteCreateManyWithoutCreatedByInput
   groups: UserGroupCreateManyWithoutUsersInput
   defaultGroup: UserGroupCreateOneInput
 }
@@ -3168,11 +3245,24 @@ input UserCreateOneInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutNotesInput {
+  create: UserCreateWithoutNotesInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateWithoutGroupsInput {
   name: String!
   email: String!
   password: String!
-  notes: NoteCreateManyInput
+  notes: NoteCreateManyWithoutCreatedByInput
+  defaultGroup: UserGroupCreateOneInput
+}
+
+input UserCreateWithoutNotesInput {
+  name: String!
+  email: String!
+  password: String!
+  groups: UserGroupCreateManyWithoutUsersInput
   defaultGroup: UserGroupCreateOneInput
 }
 
@@ -3214,7 +3304,7 @@ input UserGroupCreateInput {
   personalGroup: Boolean
   owner: UserCreateOneInput!
   users: UserCreateManyWithoutGroupsInput
-  notes: NoteCreateManyInput
+  notes: NoteCreateManyWithoutCreatedInInput
   customers: CustomerCreateManyWithoutGroupInput
   categories: CategoryCreateManyWithoutGroupInput
 }
@@ -3239,13 +3329,18 @@ input UserGroupCreateOneWithoutCustomersInput {
   connect: UserGroupWhereUniqueInput
 }
 
+input UserGroupCreateOneWithoutNotesInput {
+  create: UserGroupCreateWithoutNotesInput
+  connect: UserGroupWhereUniqueInput
+}
+
 input UserGroupCreateWithoutCategoriesInput {
   name: String!
   description: String
   personalGroup: Boolean
   owner: UserCreateOneInput!
   users: UserCreateManyWithoutGroupsInput
-  notes: NoteCreateManyInput
+  notes: NoteCreateManyWithoutCreatedInInput
   customers: CustomerCreateManyWithoutGroupInput
 }
 
@@ -3255,7 +3350,17 @@ input UserGroupCreateWithoutCustomersInput {
   personalGroup: Boolean
   owner: UserCreateOneInput!
   users: UserCreateManyWithoutGroupsInput
-  notes: NoteCreateManyInput
+  notes: NoteCreateManyWithoutCreatedInInput
+  categories: CategoryCreateManyWithoutGroupInput
+}
+
+input UserGroupCreateWithoutNotesInput {
+  name: String!
+  description: String
+  personalGroup: Boolean
+  owner: UserCreateOneInput!
+  users: UserCreateManyWithoutGroupsInput
+  customers: CustomerCreateManyWithoutGroupInput
   categories: CategoryCreateManyWithoutGroupInput
 }
 
@@ -3264,7 +3369,7 @@ input UserGroupCreateWithoutUsersInput {
   description: String
   personalGroup: Boolean
   owner: UserCreateOneInput!
-  notes: NoteCreateManyInput
+  notes: NoteCreateManyWithoutCreatedInInput
   customers: CustomerCreateManyWithoutGroupInput
   categories: CategoryCreateManyWithoutGroupInput
 }
@@ -3344,9 +3449,9 @@ input UserGroupUpdateDataInput {
   name: String
   description: String
   personalGroup: Boolean
-  owner: UserUpdateOneInput
+  owner: UserUpdateOneRequiredInput
   users: UserUpdateManyWithoutGroupsInput
-  notes: NoteUpdateManyInput
+  notes: NoteUpdateManyWithoutCreatedInInput
   customers: CustomerUpdateManyWithoutGroupInput
   categories: CategoryUpdateManyWithoutGroupInput
 }
@@ -3355,9 +3460,9 @@ input UserGroupUpdateInput {
   name: String
   description: String
   personalGroup: Boolean
-  owner: UserUpdateOneInput
+  owner: UserUpdateOneRequiredInput
   users: UserUpdateManyWithoutGroupsInput
-  notes: NoteUpdateManyInput
+  notes: NoteUpdateManyWithoutCreatedInInput
   customers: CustomerUpdateManyWithoutGroupInput
   categories: CategoryUpdateManyWithoutGroupInput
 }
@@ -3380,29 +3485,34 @@ input UserGroupUpdateOneInput {
   upsert: UserGroupUpsertNestedInput
 }
 
-input UserGroupUpdateOneWithoutCategoriesInput {
+input UserGroupUpdateOneRequiredWithoutCategoriesInput {
   create: UserGroupCreateWithoutCategoriesInput
   connect: UserGroupWhereUniqueInput
-  delete: Boolean
   update: UserGroupUpdateWithoutCategoriesDataInput
   upsert: UserGroupUpsertWithoutCategoriesInput
 }
 
-input UserGroupUpdateOneWithoutCustomersInput {
+input UserGroupUpdateOneRequiredWithoutCustomersInput {
   create: UserGroupCreateWithoutCustomersInput
   connect: UserGroupWhereUniqueInput
-  delete: Boolean
   update: UserGroupUpdateWithoutCustomersDataInput
   upsert: UserGroupUpsertWithoutCustomersInput
+}
+
+input UserGroupUpdateOneRequiredWithoutNotesInput {
+  create: UserGroupCreateWithoutNotesInput
+  connect: UserGroupWhereUniqueInput
+  update: UserGroupUpdateWithoutNotesDataInput
+  upsert: UserGroupUpsertWithoutNotesInput
 }
 
 input UserGroupUpdateWithoutCategoriesDataInput {
   name: String
   description: String
   personalGroup: Boolean
-  owner: UserUpdateOneInput
+  owner: UserUpdateOneRequiredInput
   users: UserUpdateManyWithoutGroupsInput
-  notes: NoteUpdateManyInput
+  notes: NoteUpdateManyWithoutCreatedInInput
   customers: CustomerUpdateManyWithoutGroupInput
 }
 
@@ -3410,9 +3520,19 @@ input UserGroupUpdateWithoutCustomersDataInput {
   name: String
   description: String
   personalGroup: Boolean
-  owner: UserUpdateOneInput
+  owner: UserUpdateOneRequiredInput
   users: UserUpdateManyWithoutGroupsInput
-  notes: NoteUpdateManyInput
+  notes: NoteUpdateManyWithoutCreatedInInput
+  categories: CategoryUpdateManyWithoutGroupInput
+}
+
+input UserGroupUpdateWithoutNotesDataInput {
+  name: String
+  description: String
+  personalGroup: Boolean
+  owner: UserUpdateOneRequiredInput
+  users: UserUpdateManyWithoutGroupsInput
+  customers: CustomerUpdateManyWithoutGroupInput
   categories: CategoryUpdateManyWithoutGroupInput
 }
 
@@ -3420,8 +3540,8 @@ input UserGroupUpdateWithoutUsersDataInput {
   name: String
   description: String
   personalGroup: Boolean
-  owner: UserUpdateOneInput
-  notes: NoteUpdateManyInput
+  owner: UserUpdateOneRequiredInput
+  notes: NoteUpdateManyWithoutCreatedInInput
   customers: CustomerUpdateManyWithoutGroupInput
   categories: CategoryUpdateManyWithoutGroupInput
 }
@@ -3444,6 +3564,11 @@ input UserGroupUpsertWithoutCategoriesInput {
 input UserGroupUpsertWithoutCustomersInput {
   update: UserGroupUpdateWithoutCustomersDataInput!
   create: UserGroupCreateWithoutCustomersInput!
+}
+
+input UserGroupUpsertWithoutNotesInput {
+  update: UserGroupUpdateWithoutNotesDataInput!
+  create: UserGroupCreateWithoutNotesInput!
 }
 
 input UserGroupUpsertWithWhereUniqueWithoutUsersInput {
@@ -3691,7 +3816,7 @@ input UserUpdateDataInput {
   name: String
   email: String
   password: String
-  notes: NoteUpdateManyInput
+  notes: NoteUpdateManyWithoutCreatedByInput
   groups: UserGroupUpdateManyWithoutUsersInput
   defaultGroup: UserGroupUpdateOneInput
 }
@@ -3700,7 +3825,7 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
-  notes: NoteUpdateManyInput
+  notes: NoteUpdateManyWithoutCreatedByInput
   groups: UserGroupUpdateManyWithoutUsersInput
   defaultGroup: UserGroupUpdateOneInput
 }
@@ -3714,19 +3839,33 @@ input UserUpdateManyWithoutGroupsInput {
   upsert: [UserUpsertWithWhereUniqueWithoutGroupsInput!]
 }
 
-input UserUpdateOneInput {
+input UserUpdateOneRequiredInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
-  delete: Boolean
   update: UserUpdateDataInput
   upsert: UserUpsertNestedInput
+}
+
+input UserUpdateOneRequiredWithoutNotesInput {
+  create: UserCreateWithoutNotesInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutNotesDataInput
+  upsert: UserUpsertWithoutNotesInput
 }
 
 input UserUpdateWithoutGroupsDataInput {
   name: String
   email: String
   password: String
-  notes: NoteUpdateManyInput
+  notes: NoteUpdateManyWithoutCreatedByInput
+  defaultGroup: UserGroupUpdateOneInput
+}
+
+input UserUpdateWithoutNotesDataInput {
+  name: String
+  email: String
+  password: String
+  groups: UserGroupUpdateManyWithoutUsersInput
   defaultGroup: UserGroupUpdateOneInput
 }
 
@@ -3738,6 +3877,11 @@ input UserUpdateWithWhereUniqueWithoutGroupsInput {
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutNotesInput {
+  update: UserUpdateWithoutNotesDataInput!
+  create: UserCreateWithoutNotesInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutGroupsInput {

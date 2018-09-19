@@ -1,11 +1,11 @@
 .dash-list-container {
+  text-align: left;
   background-color: #f5f5f5;
   margin: 8px;
-  /* border: .5px solid gray; */
   border-radius: 2px;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, .5);
-  /* max-width: 350px; */
   display: inline-block;
+  flex: 1 1 auto;
 }
 
 .list-item {
@@ -27,6 +27,8 @@
 }
 
 .list-header {
+  background-color: #d84315;
+  color: white;
   text-align: center;
   margin: 0;
   padding: 8px 0;

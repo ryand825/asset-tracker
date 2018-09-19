@@ -5,6 +5,8 @@ type Query {
   getCurrentUser: User
   getLatestUpdates(last: Int, groupId: ID!): Latest
   getCustomersFromGroup(groupId: ID!): [Customer]
+  getCustomerById(customerId: ID!): Customer
+  getLocationById(locationId: ID!): Location
 }
 
 type Mutation {
@@ -26,6 +28,7 @@ type Mutation {
     locationId: ID!
     equipmentId: ID!
   ): Asset
+  createLocationNote(locationId: ID!, content: String!, groupId: ID!): Location
 }
 
 type User {

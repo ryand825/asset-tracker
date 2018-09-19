@@ -66,4 +66,56 @@ async function getCustomersFromGroup(parents, args, context, info) {
   return customers;
 }
 
-export { getCustomersFromGroup, getCurrentUser, getLatestUpdates };
+async function getCustomerById(parents, args, context, info) {
+  const userId = getUserId(context);
+  if (!userId) throw new Error("Not Logged In");
+
+  const userInGroup = await context.db.exists.Customer({
+    id: args.customerId,
+    group: {
+      users_some: { id: userId }
+    }
+  });
+
+  if (userInGroup) {
+    return await context.db.query.customer(
+      {
+        where: { id: args.customerId }
+      },
+      info
+    );
+  }
+  throw new Error("Not Authorized to access customers from this group");
+}
+
+async function getLocationById(parents, args, context, info) {
+  const userId = getUserId(context);
+  if (!userId) throw new Error("Not Logged In");
+
+  const userInGroup = await context.db.exists.Location({
+    id: args.locationId,
+    customer: {
+      group: {
+        users_some: { id: userId }
+      }
+    }
+  });
+
+  if (userInGroup) {
+    return await context.db.query.location(
+      {
+        where: { id: args.locationId }
+      },
+      info
+    );
+  }
+  throw new Error("Not Authorized to access locations from this group");
+}
+
+export {
+  getCustomersFromGroup,
+  getCurrentUser,
+  getLatestUpdates,
+  getCustomerById,
+  getLocationById
+};

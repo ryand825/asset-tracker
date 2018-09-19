@@ -27,7 +27,7 @@ export default class Customers extends React.Component<CustomersProps, any> {
             );
             return (
               <>
-                <ListView listData={customerData} />
+                <ListView listData={customerData} linkTo="customer" />
               </>
             );
           }

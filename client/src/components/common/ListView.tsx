@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import { Link } from "@reach/router";
 
 import cssVar from "../../variables";
 
@@ -7,11 +8,13 @@ export interface ListViewProps {
   //Use "id" as the last key in each object in the list
   //Edit/View buttons will be generated from this
   listData: [{}];
+  linkTo: string; // Route for the 'Link' button
 }
 
 export default class ListView extends React.Component<ListViewProps, any> {
   public render() {
     const dataArray = [...this.props.listData];
+    const { linkTo } = this.props;
     const labels = Object.keys(dataArray[0]);
 
     const isId = labels.indexOf("id"); //Throw error if "id" not at the end
@@ -36,16 +39,15 @@ export default class ListView extends React.Component<ListViewProps, any> {
     });
 
     // Creates the row data
-    const contentRows = dataArray.map((data, key) => {
+    const contentRows = dataArray.map((data: any, key) => {
       const evenOdd = key % 2 === 0 ? "odd" : "even";
       let row = [];
       for (let item in data) {
         if (item === "id") {
           row.push(
             // Displays buttons for the ID column
-
             <div key={item} className={`row-data ${evenOdd}`}>
-              <button>View</button>
+              <Link to={`/${linkTo}/${data.id}`}>View</Link>
             </div>
           );
         } else {
@@ -94,7 +96,7 @@ const Grid = styled<{ columns: number }, "div">("div")`
 
   @media (min-width: ${cssVar.FULLSCREEN}px) {
     border-left: 1px solid black;
-    margin: 60px 20px 0 20px;
+    margin: 20px 20px 0 20px;
     justify-content: start;
   }
 `};
