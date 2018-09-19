@@ -34,7 +34,11 @@ export default class Customer extends React.Component<CustomerProps, any> {
             return (
               <div>
                 <h3>{customer.name}</h3>
-                <ListView listData={locationData} linkTo="location" />
+                {locationData.length > 0 ? (
+                  <ListView listData={locationData} linkTo="location" />
+                ) : (
+                  "No Locations for this customer"
+                )}
               </div>
             );
           }

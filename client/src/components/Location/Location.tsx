@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Query } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 import gql from "graphql-tag";
 
 import ListView from "../common/ListView";
@@ -22,6 +22,8 @@ export default class Location extends React.Component<LocationProps, any> {
             return <div>Loading...</div>;
           } else {
             console.log(data);
+            console.log(this.props.locationId);
+            const groupId = data.defaultGroupId;
             const {
               name,
               customer,
@@ -38,6 +40,10 @@ export default class Location extends React.Component<LocationProps, any> {
                 id: asset.id
               };
             });
+            const variables = {
+              locationId: this.props.locationId,
+              groupId
+            };
 
             return (
               <>
@@ -45,8 +51,42 @@ export default class Location extends React.Component<LocationProps, any> {
                   {name} - {customer.name}
                 </h3>
                 <h4>{address}</h4>
-                <ListView listData={listData} linkTo="asset" />
-                <Notes notes={notes} />
+                {listData.length > 0 ? (
+                  <ListView listData={listData} linkTo="asset" />
+                ) : (
+                  "No equipment for this location"
+                )}
+                <Mutation
+                  mutation={CREATE_LOCATION_NOTE}
+                  update={(cache: any, { data: { createLocationNote } }) => {
+                    const newNote = createLocationNote.notes;
+                    const query = {
+                      query: SINGLE_LOCATION_QUERY,
+                      variables: { locationId: this.props.locationId }
+                    };
+                    const { getLocationById } = cache.readQuery(query);
+                    const { notes } = getLocationById;
+                    console.log(newNote);
+                    cache.writeQuery({
+                      ...query,
+                      data: {
+                        getLocationById: {
+                          ...getLocationById,
+                          notes: notes.concat(newNote)
+                        }
+                      }
+                    });
+                    console.log(notes);
+                  }}
+                >
+                  {createLocationNote => (
+                    <Notes
+                      onClick={createLocationNote}
+                      variables={variables}
+                      notes={notes}
+                    />
+                  )}
+                </Mutation>
               </>
             );
           }
@@ -84,6 +124,29 @@ const SINGLE_LOCATION_QUERY = gql`
           name
           model
           id
+        }
+      }
+    }
+    defaultGroupId @client
+  }
+`;
+
+const CREATE_LOCATION_NOTE = gql`
+  mutation addNote($locationId: ID!, $groupId: ID!, $content: String!) {
+    createLocationNote(
+      locationId: $locationId
+      groupId: $groupId
+      content: $content
+    ) {
+      id
+      notes(last: 1) {
+        id
+        content
+        archived
+        updatedAt
+        createdBy {
+          id
+          name
         }
       }
     }

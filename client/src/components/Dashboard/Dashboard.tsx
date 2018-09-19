@@ -14,7 +14,9 @@ export default class Dashboard extends React.Component<DashboardProps, any> {
     return (
       <Query query={GET_USER}>
         {({ data }) => {
+          console.log(data);
           const defaultGroupId = data.getCurrentUser.defaultGroup.id;
+          console.log(defaultGroupId);
           return (
             <Query
               query={GET_LATEST_UPDATES}
@@ -52,7 +54,7 @@ export default class Dashboard extends React.Component<DashboardProps, any> {
 
 const GET_USER = gql`
   query {
-    getCurrentUser @client {
+    getCurrentUser {
       defaultGroup {
         id
         name

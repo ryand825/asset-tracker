@@ -16,6 +16,8 @@ async function getLatestUpdates(parents, args, context, info) {
   const userId = getUserId(context);
   if (!userId) throw new Error("Not Logged In");
 
+  console.log(userId);
+
   let latest = { locations: [{}], customers: [{}], assets: [{}] };
   latest.assets = await context.db.query.assets(
     {
@@ -91,6 +93,11 @@ async function getCustomerById(parents, args, context, info) {
 async function getLocationById(parents, args, context, info) {
   const userId = getUserId(context);
   if (!userId) throw new Error("Not Logged In");
+  console.log("###################################### log");
+  console.log("###################################### log");
+  console.log("###################################### log");
+  console.log("###################################### log");
+  console.log("###################################### log");
 
   const userInGroup = await context.db.exists.Location({
     id: args.locationId,

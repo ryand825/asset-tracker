@@ -18,7 +18,7 @@ const noteMutations = {
 
     if (
       // Using this to test that the location exists in the correct group
-      // because the 'exists' function can give false postives
+      // because the 'exists' function gives false postives
       userInGroup.customers[0] &&
       userInGroup.customers[0].locations[0].id === args.locationId
     ) {
