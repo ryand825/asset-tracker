@@ -9,20 +9,24 @@ export interface ListViewProps {
   //Edit/View buttons will be generated from this
   listData: [{}];
   linkTo: string; // Route for the 'Link' button
+  linkFrom: string;
 }
 
 export default class ListView extends React.Component<ListViewProps, any> {
+  public static defaultProps: Partial<ListViewProps> = {
+    linkFrom: ""
+  };
+
   public render() {
-    const dataArray = [...this.props.listData];
-    const { linkTo } = this.props;
-    const labels = Object.keys(dataArray[0]);
+    const { listData, linkTo, linkFrom } = this.props;
+    const labels = Object.keys(listData[0]);
 
     const isId = labels.indexOf("id"); //Throw error if "id" not at the end
     if (isId >= 0) {
       if (labels[isId] !== labels[labels.length - 1]) {
         throw new Error(`"id" must be the last key for each object`);
       } else {
-        labels[isId] = " ";
+        labels[isId] = "";
       }
     }
 
@@ -30,16 +34,24 @@ export default class ListView extends React.Component<ListViewProps, any> {
 
     // Formats camel case and creates an array of column headers
     const headerRow = labels.map((label, key) => {
-      const labelString = label
-        .replace(/([A-Z])/g, " $1")
-        .replace(/^./, function(str) {
-          return str.toUpperCase();
-        });
-      return <ColumnHeader key={key}>{labelString}</ColumnHeader>;
+      if (label) {
+        const labelString = label
+          .replace(/([A-Z])/g, " $1")
+          .replace(/^./, function(str) {
+            return str.toUpperCase();
+          });
+        return <ColumnHeader key={key}>{labelString}</ColumnHeader>;
+      } else {
+        return (
+          <ColumnHeader key={key}>
+            <Link to={`/create/${linkTo}/${linkFrom}`}>+</Link>
+          </ColumnHeader>
+        );
+      }
     });
 
     // Creates the row data
-    const contentRows = dataArray.map((data: any, key) => {
+    const contentRows = listData.map((data: any, key) => {
       const evenOdd = key % 2 === 0 ? "odd" : "even";
       let row = [];
       for (let item in data) {
@@ -96,7 +108,7 @@ const Grid = styled<{ columns: number }, "div">("div")`
 
   @media (min-width: ${cssVar.FULLSCREEN}px) {
     border-left: 1px solid black;
-    margin: 20px 20px 0 20px;
+    margin: 20px 20px 0 0;
     justify-content: start;
   }
 `};
@@ -107,4 +119,22 @@ const ColumnHeader = styled.div`
   align-self: stretch;
   color: white;
   background-color: ${cssVar.SECONDARY_COLOR};
+
+  & a {
+    color: black;
+    display: inline-block;
+    background-color: ${cssVar.PRIMARY_LIGHT};
+    border: none;
+    width: 60px;
+    font-size: 1.5em;
+    margin-top: -5px;
+    cursor: pointer;
+  }
+
+  & a:hover {
+    border-radius: 2px;
+    background-color: ${cssVar.SECONDARY_LIGHT};
+    color: white;
+    box-shadow: 0px 0px 6px 2px rgba(255, 255, 255, 0.5);
+  }
 `;

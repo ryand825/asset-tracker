@@ -1,26 +1,28 @@
 import * as React from "react";
-// import { Query, Mutation } from "react-apollo";
-// import gql from "graphql-tag";
 import * as moment from "moment";
 
 import "./notes.css";
 
 export interface NotesProps {
-  notes: [{}];
+  notes: [{ content: string }];
   onClick: ({}) => void;
   variables: {};
 }
 
 export default class Notes extends React.Component<NotesProps, any> {
   state = {
-    newPostContent: ""
+    newPostContent: "",
+    submitDisabled: true
   };
 
   componentDidMount() {
     setTimeout(() => this.scrollToBottom(), 10);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps: NotesProps) {
+    if (prevProps.notes.length < this.props.notes.length) {
+      this.setState({ newPostContent: "" });
+    }
     this.scrollToBottom();
   }
 
@@ -32,25 +34,26 @@ export default class Notes extends React.Component<NotesProps, any> {
   };
 
   handleInput = (e: { target: { value: String } }) => {
+    const submitDisabled = e.target.value.length > 0 ? false : true;
+
     this.setState({
-      newPostContent: e.target.value
+      newPostContent: e.target.value,
+      submitDisabled
     });
   };
 
   submitNote = () => {
-    if (this.state.newPostContent) {
-      const variables = {
-        ...this.props.variables,
-        content: this.state.newPostContent
-      };
-      this.props.onClick({ variables });
-    }
+    const variables = {
+      ...this.props.variables,
+      content: this.state.newPostContent
+    };
+    this.props.onClick({ variables });
+    this.setState({ submitDisabled: true });
   };
 
   public render() {
     const { notes } = this.props;
     const currentTime = new Date();
-    // currentTime.setSeconds(currentTime.getSeconds() + 180);
 
     console.log(notes);
     const noteList = notes.map((note: any) => {
@@ -69,7 +72,9 @@ export default class Notes extends React.Component<NotesProps, any> {
 
       return (
         <div className="note-box" key={id}>
-          <p className="note-content">{content}</p>
+          <div className="note-content">
+            <p>{content}</p>
+          </div>
           <small className="note-footer">
             {createdBy.name + " - " + timeStamp}
           </small>
@@ -96,7 +101,11 @@ export default class Notes extends React.Component<NotesProps, any> {
               onChange={this.handleInput}
             />
 
-            <button onClick={this.submitNote} className="note-submit">
+            <button
+              disabled={this.state.submitDisabled}
+              onClick={this.submitNote}
+              className="note-submit"
+            >
               Submit
             </button>
           </div>
@@ -105,30 +114,3 @@ export default class Notes extends React.Component<NotesProps, any> {
     }
   }
 }
-
-// const _MUTATION = gql`
-//   mutation createLocationNote(
-//     $locationId: ID!
-//     $groupId: ID!
-//     $content: String!
-//   ) {
-//     createLocationNote(
-//       locationId: $locationId
-//       groupId: $groupId
-//       content: $content
-//     ) {
-//       id
-//       name
-//       notes {
-//         id
-//         content
-//       }
-//     }
-//   }
-// `;
-
-// const GET_GROUP_ID = gql`
-//   query {
-//     defaultGroupId @client
-//   }
-// `;

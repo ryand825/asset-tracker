@@ -21,8 +21,6 @@ export default class Location extends React.Component<LocationProps, any> {
           if (loading) {
             return <div>Loading...</div>;
           } else {
-            console.log(data);
-            console.log(this.props.locationId);
             const groupId = data.defaultGroupId;
             const {
               name,
@@ -52,7 +50,7 @@ export default class Location extends React.Component<LocationProps, any> {
                 </h3>
                 <h4>{address}</h4>
                 {listData.length > 0 ? (
-                  <ListView listData={listData} linkTo="asset" />
+                  <ListView listData={listData} linkTo="asset" linkFrom="" />
                 ) : (
                   "No equipment for this location"
                 )}
@@ -66,7 +64,6 @@ export default class Location extends React.Component<LocationProps, any> {
                     };
                     const { getLocationById } = cache.readQuery(query);
                     const { notes } = getLocationById;
-                    console.log(newNote);
                     cache.writeQuery({
                       ...query,
                       data: {
@@ -76,7 +73,6 @@ export default class Location extends React.Component<LocationProps, any> {
                         }
                       }
                     });
-                    console.log(notes);
                   }}
                 >
                   {createLocationNote => (

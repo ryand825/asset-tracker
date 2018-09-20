@@ -27,7 +27,11 @@ export default class Customers extends React.Component<CustomersProps, any> {
             );
             return (
               <>
-                <ListView listData={customerData} linkTo="customer" />
+                <ListView
+                  listData={customerData}
+                  linkTo="customer"
+                  linkFrom={data.defaultGroupId}
+                />
               </>
             );
           }
@@ -46,5 +50,6 @@ const CUSTOMER_QUERY = gql`
         id
       }
     }
+    defaultGroupId @client
   }
 `;
