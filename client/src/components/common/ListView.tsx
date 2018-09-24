@@ -44,7 +44,7 @@ export default class ListView extends React.Component<ListViewProps, any> {
       } else {
         return (
           <ColumnHeader key={key}>
-            <Link to={`/create/${linkTo}/${linkFrom}`}>+</Link>
+            <Link to={`/customers/create/${linkFrom}`}>+</Link>
           </ColumnHeader>
         );
       }
@@ -74,10 +74,13 @@ export default class ListView extends React.Component<ListViewProps, any> {
     });
 
     return (
-      <Grid columns={columns}>
-        {headerRow}
-        {contentRows}
-      </Grid>
+      <>
+        {this.props.children}
+        <Grid columns={columns}>
+          {headerRow}
+          {contentRows}
+        </Grid>
+      </>
     );
   }
 }
@@ -125,9 +128,11 @@ const ColumnHeader = styled.div`
     display: inline-block;
     background-color: ${cssVar.PRIMARY_LIGHT};
     border: none;
-    width: 60px;
-    font-size: 1.5em;
-    margin-top: -5px;
+    width: 25px;
+    padding: 0;
+    line-height: 25px;
+    font-size: 2.2em;
+    margin-top: -2px;
     cursor: pointer;
   }
 

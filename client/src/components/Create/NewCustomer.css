@@ -1,0 +1,10 @@
+.new-form {
+  margin-top: 1.5rem;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid black;
+  background-color: white;
+  padding: 1rem;
+  z-index: 10;
+}

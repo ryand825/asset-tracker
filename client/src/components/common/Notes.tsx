@@ -55,7 +55,6 @@ export default class Notes extends React.Component<NotesProps, any> {
     const { notes } = this.props;
     const currentTime = new Date();
 
-    console.log(notes);
     const noteList = notes.map((note: any) => {
       const { updatedAt, createdBy, content, id } = note;
       const noteTime = new Date(updatedAt);

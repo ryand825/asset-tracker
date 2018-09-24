@@ -31,7 +31,9 @@ export default class Customers extends React.Component<CustomersProps, any> {
                   listData={customerData}
                   linkTo="customer"
                   linkFrom={data.defaultGroupId}
-                />
+                >
+                  {this.props.children}
+                </ListView>
               </>
             );
           }

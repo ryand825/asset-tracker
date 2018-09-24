@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 
 interface ModalProps {
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const Modal: React.SFC<ModalProps> = props => {

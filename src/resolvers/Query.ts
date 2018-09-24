@@ -16,41 +16,47 @@ async function getLatestUpdates(parents, args, context, info) {
   const userId = getUserId(context);
   if (!userId) throw new Error("Not Logged In");
 
-  console.log(userId);
+  console.log("#######################################");
+  console.log(args.groupId);
+  console.log("#######################################");
 
-  let latest = { locations: [{}], customers: [{}], assets: [{}] };
-  latest.assets = await context.db.query.assets(
-    {
-      where: {
-        equipment: {
-          category: { group: { id: args.groupId, users_some: { id: userId } } }
-        }
+  // let latest = { locations: [{}], customers: [{}], assets: [{}] };
+  const latest = {
+    assets: await context.db.query.assets(
+      {
+        where: {
+          equipment: {
+            category: {
+              group: { id: args.groupId, users_some: { id: userId } }
+            }
+          }
+        },
+        last: args.last,
+        orderBy: "updatedAt_ASC"
       },
-      last: args.last,
-      orderBy: "updatedAt_ASC"
-    },
-    `{id serial description updatedAt equipment{name}}`
-  );
+      `{id serial description updatedAt equipment{id name}}`
+    ),
 
-  latest.customers = await context.db.query.customers(
-    {
-      where: { group: { id: args.groupId, users_some: { id: userId } } },
-      last: args.last,
-      orderBy: "updatedAt_ASC"
-    },
-    `{id name updatedAt}`
-  );
-
-  latest.locations = await context.db.query.locations(
-    {
-      where: {
-        customer: { group: { id: args.groupId, users_some: { id: userId } } }
+    customers: await context.db.query.customers(
+      {
+        where: { group: { id: args.groupId, users_some: { id: userId } } },
+        last: args.last,
+        orderBy: "updatedAt_ASC"
       },
-      last: args.last,
-      orderBy: "updatedAt_ASC"
-    },
-    `{id name updatedAt customer{name}}`
-  );
+      `{id name updatedAt}`
+    ),
+
+    locations: await context.db.query.locations(
+      {
+        where: {
+          customer: { group: { id: args.groupId, users_some: { id: userId } } }
+        },
+        last: args.last,
+        orderBy: "updatedAt_ASC"
+      },
+      `{id name updatedAt customer{id name}}`
+    )
+  };
   return latest;
 }
 

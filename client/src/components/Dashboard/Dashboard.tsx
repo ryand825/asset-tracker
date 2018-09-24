@@ -11,16 +11,19 @@ export interface DashboardProps {
 
 export default class Dashboard extends React.Component<DashboardProps, any> {
   public render() {
+    let defaultGroupId = "";
     return (
       <Query query={GET_USER}>
-        {({ data }) => {
+        {({ loading, data }) => {
+          if (loading) return "Loading...";
           console.log(data);
-          const defaultGroupId = data.getCurrentUser.defaultGroup.id;
+          defaultGroupId = data.getCurrentUser.defaultGroup.id;
           console.log(defaultGroupId);
           return (
             <Query
               query={GET_LATEST_UPDATES}
               variables={{ groupId: defaultGroupId }}
+              // fetchPolicy="no-cache"
             >
               {({ loading, data }) => {
                 if (loading) {
@@ -76,6 +79,7 @@ const GET_LATEST_UPDATES = gql`
         updatedAt
         id
         customer {
+          id
           name
         }
       }
@@ -84,6 +88,7 @@ const GET_LATEST_UPDATES = gql`
         updatedAt
         id
         equipment {
+          id
           name
         }
       }
