@@ -2,6 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { Link } from "@reach/router";
 
+// import NewCustomer from "../Create/NewCustomer";
 import cssVar from "../../variables";
 
 export interface ListViewProps {
@@ -9,16 +10,30 @@ export interface ListViewProps {
   //Edit/View buttons will be generated from this
   listData: [{}];
   linkTo: string; // Route for the 'Link' button
-  linkFrom: string;
+  openCreateMode?: () => void;
+  createOptions?: {
+    inId: string;
+    fields: [string];
+    mutation: string;
+  };
 }
 
-export default class ListView extends React.Component<ListViewProps, any> {
-  public static defaultProps: Partial<ListViewProps> = {
-    linkFrom: ""
+export interface ListViewState {
+  isCreateMode: boolean;
+}
+
+class ListView extends React.Component<ListViewProps, any> {
+  state = {
+    isCreateMode: false
+  };
+
+  closeCreateMode = () => {
+    this.setState({ isCreateMode: false });
   };
 
   public render() {
-    const { listData, linkTo, linkFrom } = this.props;
+    const { listData, linkTo } = this.props;
+    // const { isCreateMode } = this.state;
     const labels = Object.keys(listData[0]);
 
     const isId = labels.indexOf("id"); //Throw error if "id" not at the end
@@ -44,7 +59,8 @@ export default class ListView extends React.Component<ListViewProps, any> {
       } else {
         return (
           <ColumnHeader key={key}>
-            <Link to={`/customers/create/${linkFrom}`}>+</Link>
+            {/* <Link to={`/customers/create/${linkFrom}`}>+</Link> */}
+            <button onClick={this.props.openCreateMode}>+</button>
           </ColumnHeader>
         );
       }
@@ -75,7 +91,12 @@ export default class ListView extends React.Component<ListViewProps, any> {
 
     return (
       <>
-        {this.props.children}
+        {/* {isCreateMode && (
+          <NewCustomer
+            createOptions={createOptions}
+            closeCreateMode={this.closeCreateMode}
+          />
+        )} */}
         <Grid columns={columns}>
           {headerRow}
           {contentRows}
@@ -84,6 +105,8 @@ export default class ListView extends React.Component<ListViewProps, any> {
     );
   }
 }
+
+export default ListView;
 
 const Grid = styled<{ columns: number }, "div">("div")`
   ${props => `
@@ -123,7 +146,7 @@ const ColumnHeader = styled.div`
   color: white;
   background-color: ${cssVar.SECONDARY_COLOR};
 
-  & a {
+  & button {
     color: black;
     display: inline-block;
     background-color: ${cssVar.PRIMARY_LIGHT};
@@ -136,7 +159,7 @@ const ColumnHeader = styled.div`
     cursor: pointer;
   }
 
-  & a:hover {
+  & button:hover {
     border-radius: 2px;
     background-color: ${cssVar.SECONDARY_LIGHT};
     color: white;

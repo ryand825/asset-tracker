@@ -10,7 +10,7 @@ import Customers from "./components/Customers/Customers";
 import Customer from "./components/Customers/Customer";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Location from "./components/Location/Location";
-import NewCustomer from "./components/Create/NewCustomer";
+// import NewCustomer from "./components/Create/NewCustomer";
 
 export default class App extends React.Component {
   public render() {
@@ -28,7 +28,7 @@ export default class App extends React.Component {
                 <Router>
                   <Dashboard path="/dashboard" />
                   <Customers path="/customers">
-                    <NewCustomer path="/create/:groupId" />
+                    {/* <NewCustomer path="/create/:groupId" /> */}
                   </Customers>
                   <Customer path="/customer/:customerId" customerId="" />
                   <Location path="/location/:locationId" locationId="" />

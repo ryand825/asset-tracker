@@ -50,7 +50,7 @@ export default class Location extends React.Component<LocationProps, any> {
                 </h3>
                 <h4>{address}</h4>
                 {listData.length > 0 ? (
-                  <ListView listData={listData} linkTo="asset" linkFrom="" />
+                  <ListView listData={listData} linkTo="asset" />
                 ) : (
                   "No equipment for this location"
                 )}

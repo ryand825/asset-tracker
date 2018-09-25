@@ -1,0 +1,11 @@
+label {
+  display: block;
+}
+
+input {
+  background-color: rgba(120, 120, 120, 0.1);
+  border: 1px solid lightgray;
+  border-radius: 9px;
+  padding: .5em;
+  margin-bottom: 1em;
+}
