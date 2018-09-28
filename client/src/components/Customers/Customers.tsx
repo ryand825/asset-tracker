@@ -29,6 +29,7 @@ export default class Customers extends React.Component<CustomersProps, any> {
           if (loading) {
             return "loading...";
           } else {
+            const { defaultGroupId } = data;
             const customerData = data.getCustomersFromGroup.map(
               (customer: { id: string; name: string; locations: [] }) => {
                 return {
@@ -44,16 +45,14 @@ export default class Customers extends React.Component<CustomersProps, any> {
                   openCreateMode={this.openCreateMode}
                   listData={customerData}
                   linkTo="customer"
-                  // createOptions={{
-                  //   inId: "cjlms583gntq40b17a9ama6ae",
-                  //   fields: ["Name"],
-                  //   mutation: CUSTOMER_QUERY
-                  // }}
                 />
                 {isCreateMode && (
                   <NewCustomer
+                    mutation={CREATE_CUSTOMER}
+                    query={CUSTOMER_QUERY}
                     closeCreateMode={this.closeCreateMode}
-                    fields={["Name"]}
+                    fields={["name"]}
+                    groupId={defaultGroupId}
                   />
                 )}
               </>
@@ -73,13 +72,26 @@ const CUSTOMER_QUERY = gql`
       locations {
         id
       }
+      group {
+        id
+      }
     }
     defaultGroupId @client
   }
 `;
 
-// const CREATE_CUSTOMER = gql`
-//   mutation createCustomer($groupId: ID!) {
-//     createCustomer(groupId: $groupId)
-//   }
-// `;
+const CREATE_CUSTOMER = gql`
+  mutation createCustomer($groupId: ID!, $name: String!) {
+    createCustomer(groupId: $groupId, name: $name) {
+      id
+      name
+      locations {
+        id
+      }
+      group {
+        id
+      }
+    }
+    defaultGroupId @client
+  }
+`;

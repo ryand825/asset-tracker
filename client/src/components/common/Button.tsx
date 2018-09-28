@@ -5,20 +5,25 @@ interface IButtonProps {
   onClick?: () => void;
   primary?: boolean;
   warning?: boolean;
+  disabled?: boolean;
 }
 
 const Button: React.SFC<IButtonProps> = props => {
   let color = "";
-  if (props.primary) {
-    color = "green";
+  const disabled = props.disabled ? true : false;
+
+  if (disabled) {
+    color = "lightgray";
+  } else if (props.primary) {
+    color = "rgba(173,255,47, 0.3)";
   } else if (props.warning) {
-    color = "red";
+    color = "rgba(255,69,0, 0.3)";
   } else {
     color = "white";
   }
 
   return (
-    <StyledButton color={color} onClick={props.onClick}>
+    <StyledButton disabled={disabled} color={color} onClick={props.onClick}>
       {props.children}
     </StyledButton>
   );
@@ -26,15 +31,21 @@ const Button: React.SFC<IButtonProps> = props => {
 
 export default Button;
 
-const StyledButton = styled.button`
+const StyledButton = styled<{ color: string; disabled: boolean }, "button">(
+  "button"
+)`
+  color: black;
   padding: 0.6em 1em;
   margin-right: 1em;
-  background-color: white;
+  background-color: ${props => props.color};
   border: 0.5px solid lightgray;
-  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: ${props =>
+    props.disabled
+      ? "0px 0px 3px rgba(0, 0, 0, 0.5) inset"
+      : "0px 0px 3px rgba(0, 0, 0, 0.5)"};
 
   &:hover {
-    cursor: pointer;
+    cursor: ${props => (props.disabled ? "default" : "pointer")};
     background-color: lightgray;
   }
 `;

@@ -68,7 +68,7 @@ async function getCustomersFromGroup(parents, args, context, info) {
     {
       where: { group: { id: args.groupId, users_some: { id: userId } } }
     },
-    `{id name locations{id}}`
+    info
   );
 
   return customers;

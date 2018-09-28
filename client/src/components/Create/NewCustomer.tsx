@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-// import { navigate } from "@reach/router";
+import { Mutation } from "react-apollo";
 
 import Input from "../common/Input";
 import Button from "../common/Button";
@@ -13,6 +13,8 @@ export interface NewCustomerProps {
   closeCreateMode: () => void;
   inId: string;
   fields: [string];
+  mutation: any;
+  query: any;
 }
 
 export default class NewCustomer extends React.Component<
@@ -23,7 +25,13 @@ export default class NewCustomer extends React.Component<
     groupId: ""
   };
 
-  state = {};
+  // Initiates object for initial state
+  private fields = this.props.fields.reduce((obj, value) => {
+    obj[value] = "";
+    return obj;
+  }, {});
+
+  state = { ...this.fields };
 
   onChangeHandler = (e: any) => {
     const { name, value } = e.target;
@@ -35,8 +43,20 @@ export default class NewCustomer extends React.Component<
     });
   };
 
+  onSubmit = (createFunction: ({}) => void) => {
+    const { groupId } = this.props;
+    const variables = { ...this.state, groupId };
+    createFunction({ variables });
+  };
+
   public render() {
     const { closeCreateMode, fields } = this.props;
+
+    let disabled = true;
+    for (let value in this.state) {
+      disabled = this.state[value].length < 1;
+      if (disabled) break;
+    }
 
     const fieldsDisplay = fields.map((field: string) => {
       return (
@@ -50,14 +70,29 @@ export default class NewCustomer extends React.Component<
     });
 
     return (
-      <>
-        <Modal onClick={closeCreateMode} />
-        <FormContainer>
-          <form action="">{fieldsDisplay}</form>
-          <Button>Create</Button>
-          <Button onClick={closeCreateMode}>Cancel</Button>
-        </FormContainer>
-      </>
+      <Mutation
+        mutation={this.props.mutation}
+        refetchQueries={[this.props.query]}
+      >
+        {createCustomer => (
+          <>
+            <Modal onClick={closeCreateMode} />
+            <FormContainer>
+              <form action="">{fieldsDisplay}</form>
+              <Button
+                disabled={disabled}
+                primary={true}
+                onClick={() => this.onSubmit(createCustomer)}
+              >
+                Create
+              </Button>
+              <Button warning={true} onClick={closeCreateMode}>
+                Cancel
+              </Button>
+            </FormContainer>
+          </>
+        )}
+      </Mutation>
     );
   }
 }
@@ -65,6 +100,7 @@ export default class NewCustomer extends React.Component<
 const FormContainer = styled.div`
   margin-top: 1.5rem;
   position: fixed;
+  top: 10%;
   left: 50%;
   transform: translateX(-50%);
   border: 1px solid black;

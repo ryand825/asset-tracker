@@ -10,8 +10,7 @@ import { persistCache } from "apollo-cache-persist";
 
 const cache = new InMemoryCache();
 const defaultState = {
-  defaultGroupId: "",
-  isCreateMode: false
+  defaultGroupId: ""
 };
 
 persistCache({
