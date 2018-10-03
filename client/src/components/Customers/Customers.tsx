@@ -9,6 +9,10 @@ export interface CustomersProps {
   path: string;
 }
 
+export interface createCustomer {
+  test: {};
+}
+
 export default class Customers extends React.Component<CustomersProps, any> {
   state = { isCreateMode: false };
 
@@ -30,6 +34,7 @@ export default class Customers extends React.Component<CustomersProps, any> {
             return "loading...";
           } else {
             const { defaultGroupId } = data;
+            console.log(data);
             const customerData = data.getCustomersFromGroup.map(
               (customer: { id: string; name: string; locations: [] }) => {
                 return {
@@ -39,6 +44,7 @@ export default class Customers extends React.Component<CustomersProps, any> {
                 };
               }
             );
+
             return (
               <>
                 <ListView
@@ -49,10 +55,28 @@ export default class Customers extends React.Component<CustomersProps, any> {
                 {isCreateMode && (
                   <NewCustomer
                     mutation={CREATE_CUSTOMER}
-                    query={CUSTOMER_QUERY}
                     closeCreateMode={this.closeCreateMode}
                     fields={["name"]}
                     groupId={defaultGroupId}
+                    update={(
+                      cache: any,
+                      { data: createCustomer }: { data: { createCustomer: {} } }
+                    ) => {
+                      const newCustomer = createCustomer.createCustomer;
+                      const query = {
+                        query: CUSTOMER_QUERY
+                      };
+                      const { getCustomersFromGroup } = cache.readQuery(query);
+                      cache.writeQuery({
+                        ...query,
+                        data: {
+                          getCustomersFromGroup: [
+                            ...getCustomersFromGroup,
+                            newCustomer
+                          ]
+                        }
+                      });
+                    }}
                   />
                 )}
               </>
@@ -65,7 +89,7 @@ export default class Customers extends React.Component<CustomersProps, any> {
 }
 
 const CUSTOMER_QUERY = gql`
-  query {
+  query getCustomersFromGroup {
     getCustomersFromGroup(groupId: "cjlms583gntq40b17a9ama6ae") {
       id
       name

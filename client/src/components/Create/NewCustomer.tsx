@@ -8,23 +8,17 @@ import Modal from "../common/Modal";
 import "./NewCustomer.css";
 
 export interface NewCustomerProps {
-  path: string;
   groupId: string;
   closeCreateMode: () => void;
-  inId: string;
   fields: [string];
   mutation: any;
-  query: any;
+  update: any;
 }
 
 export default class NewCustomer extends React.Component<
   NewCustomerProps,
   any
 > {
-  public static defaultProps: Partial<NewCustomerProps> = {
-    groupId: ""
-  };
-
   // Initiates object for initial state
   private fields = this.props.fields.reduce((obj, value) => {
     obj[value] = "";
@@ -70,10 +64,7 @@ export default class NewCustomer extends React.Component<
     });
 
     return (
-      <Mutation
-        mutation={this.props.mutation}
-        refetchQueries={[this.props.query]}
-      >
+      <Mutation mutation={this.props.mutation} update={this.props.update}>
         {createCustomer => (
           <>
             <Modal onClick={closeCreateMode} />
