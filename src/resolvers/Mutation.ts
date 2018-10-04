@@ -1,8 +1,10 @@
 import { register, login } from "./mutations/Auth";
 import noteMutations from "./mutations/Notes";
 import { getUserId } from "../utils";
+import deleteMutations from "./mutations/Delete";
 
 const Mutations = {
+  ...deleteMutations,
   register,
   login,
   ...noteMutations,
