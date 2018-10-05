@@ -11,13 +11,12 @@ const deleteMutations = {
     );
     if (customerGroup) {
       const groupId = customerGroup.group.id;
-      const userId = await UserInGroup(parent, groupId, context);
+      await UserInGroup(parent, groupId, context);
     } else {
       throw new Error("Customer not found");
     }
 
     const customer = await context.db.mutation.deleteCustomer(
-      // const customer = await context.db.query.customer(
       {
         where: { id: args.customerId }
       },

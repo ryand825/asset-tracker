@@ -15,9 +15,10 @@ const Button: React.SFC<IButtonProps> = props => {
   if (disabled) {
     color = "lightgray";
   } else if (props.primary) {
-    color = "rgba(173,255,47, 0.3)";
+    color = "rgba(173,255,47, 0.4)";
   } else if (props.warning) {
-    color = "rgba(255,69,0, 0.3)";
+    // color = "rgba(255,69,0, 0.4)";
+    color = "rgba(255, 0, 0, 0.6)";
   } else {
     color = "white";
   }
@@ -44,8 +45,15 @@ const StyledButton = styled<{ color: string; disabled: boolean }, "button">(
       ? "0px 0px 3px rgba(0, 0, 0, 0.5) inset"
       : "0px 0px 3px rgba(0, 0, 0, 0.5)"};
 
-  &:hover {
-    cursor: ${props => (props.disabled ? "default" : "pointer")};
-    background-color: lightgray;
+  &:disabled {
+    color: gray;
+  }
+
+  &:hover:not([disabled]) {
+    cursor: pointer;
+    background-color: white;
+    box-shadow: ${props =>
+      `0px 0px 6px 1px ${props.color === "white" ? "gray" : props.color}`};
+    color: ${props => (props.color === "white" ? "gray" : props.color)};
   }
 `;

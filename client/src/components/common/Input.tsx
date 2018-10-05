@@ -4,7 +4,7 @@ import * as React from "react";
 import "./input.css";
 
 export interface InputProps {
-  name: string;
+  name?: string;
   value: string;
   onChange: (e: any) => void;
 }
@@ -12,10 +12,10 @@ export interface InputProps {
 export default class Input extends React.Component<InputProps, any> {
   public render() {
     const { name, value, onChange } = this.props;
-    const label = name.charAt(0).toUpperCase() + name.substr(1);
+    const label = name && name.charAt(0).toUpperCase() + name.substr(1);
     return (
       <>
-        <label htmlFor={name}>{label}</label>
+        {name && <label htmlFor={name}>{label}</label>}
         <input onChange={onChange} name={name} value={value} type="text" />
       </>
     );

@@ -37,10 +37,10 @@ export default class NewCustomer extends React.Component<
     });
   };
 
-  onSubmit = (createFunction: ({}) => void) => {
-    const { groupId } = this.props;
+  onSubmit = (createFunction: ({}) => Promise<any>) => {
+    const { groupId, closeCreateMode } = this.props;
     const variables = { ...this.state, groupId };
-    createFunction({ variables });
+    createFunction({ variables }).then(() => closeCreateMode());
   };
 
   public render() {
