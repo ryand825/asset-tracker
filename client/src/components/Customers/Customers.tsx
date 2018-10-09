@@ -3,7 +3,7 @@ import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
 import ListView from "../common/ListView";
-import NewCustomer from "../Create/NewCustomer";
+import CreateCustomer from "../Create/CreateCustomer";
 
 export interface CustomersProps {
   path: string;
@@ -53,7 +53,7 @@ export default class Customers extends React.Component<CustomersProps, any> {
                   linkTo="customer"
                 />
                 {isCreateMode && (
-                  <NewCustomer
+                  <CreateCustomer
                     mutation={CREATE_CUSTOMER}
                     closeCreateMode={this.closeCreateMode}
                     fields={["name"]}

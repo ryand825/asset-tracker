@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 
 import ListView from "../common/ListView";
+// import Create from "../Create/Create";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import DeleteDialog from "../common/DeleteDialog";
@@ -15,7 +16,15 @@ export interface CustomerProps {
 }
 
 export default class Customer extends React.Component<CustomerProps, any> {
-  state = { deleteMode: false };
+  state = { deleteMode: false, isCreateMode: false };
+
+  openCreateMode = () => {
+    this.setState({ isCreateMode: true });
+  };
+
+  closeCreateMode = () => {
+    this.setState({ isCreateMode: false });
+  };
 
   handleDelete = () => {
     this.setState({ deleteMode: true });
@@ -25,6 +34,7 @@ export default class Customer extends React.Component<CustomerProps, any> {
     this.setState({ deleteMode: false });
   };
   public render() {
+    const { isCreateMode, deleteMode } = this.state;
     return (
       <Query
         query={SINGLE_CUSTOMER_QUERY}
@@ -34,7 +44,8 @@ export default class Customer extends React.Component<CustomerProps, any> {
           if (loading) {
             return <div>Loading...</div>;
           } else {
-            const customer = data.getCustomerById;
+            console.log(data);
+            const { customer, defaultGroupId } = data.getCustomerById;
             const locationData = customer.locations.map(
               (location: { id: string; name: string; address: string }) => {
                 return {
@@ -83,7 +94,7 @@ export default class Customer extends React.Component<CustomerProps, any> {
                         <Button warning onClick={this.handleDelete}>
                           Delete
                         </Button>
-                        {this.state.deleteMode && (
+                        {deleteMode && (
                           <>
                             <Modal onClick={this.cancelDelete} />
                             <DeleteDialog
@@ -101,7 +112,47 @@ export default class Customer extends React.Component<CustomerProps, any> {
                   </Mutation>
                 </Header>
                 {locationData.length > 0 ? (
-                  <ListView listData={locationData} linkTo="location" />
+                  <>
+                    <ListView
+                      listData={locationData}
+                      linkTo="location"
+                      openCreateMode={this.openCreateMode}
+                    />
+                    {isCreateMode && defaultGroupId
+                    //Create New Location
+                    // <Create
+                    //   mutation={CREATE_LOCATION}
+                    //   closeCreateMode={this.closeCreateMode}
+                    //   fields={["name", "address"]}
+                    //   groupId={defaultGroupId}
+                    //   update={(
+                    //     // Update location list
+                    //     cache: any,
+                    //     {
+                    //       data: createCustomer
+                    //     }: { data: { createCustomer: {} } }
+                    //   ) => {
+                    //     const newCustomer = createCustomer.createCustomer;
+                    //     const query = {
+                    //       query: SINGLE_CUSTOMER_QUERY,
+                    //       variables: { customerId: this.props.customerId }
+                    //     };
+                    //     const { getCustomersFromGroup } = cache.readQuery(
+                    //       query
+                    //     );
+                    //     cache.writeQuery({
+                    //       ...query,
+                    //       data: {
+                    //         getCustomersFromGroup: [
+                    //           ...getCustomersFromGroup,
+                    //           newCustomer
+                    //         ]
+                    //       }
+                    //     });
+                    //   }}
+                    // />
+                    }
+                  </>
                 ) : (
                   "No Locations for this customer"
                 )}
@@ -139,6 +190,7 @@ const SINGLE_CUSTOMER_QUERY = gql`
         address
       }
     }
+    defaultGroupId @client
   }
 `;
 
@@ -150,6 +202,16 @@ const DELETE_CUSTOMER = gql`
     }
   }
 `;
+
+// const CREATE_LOCATION = gql`
+//   mutation createLocation($name: String, $customerId: ID!, $address: String) {
+//     createLocation(name: $name, customerId: $customerId, address: $address) {
+//       id
+//       name
+//       address
+//     }
+//   }
+// `;
 
 const CUSTOMER_QUERY = gql`
   query getCustomersFromGroup {
