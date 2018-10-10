@@ -1,12 +1,14 @@
 import * as React from "react";
 import styled from "styled-components";
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
 
 import Button from "./Button";
 import Input from "./Input";
 
 export interface CreateDialogProps {
   fields: string[];
-  createFunction: () => void;
+  createFunction: ({}) => Promise<any>;
   closeCreateMode: () => void;
 }
 
@@ -30,6 +32,14 @@ export default class CreateDialog extends React.Component<
       ...formState
     });
   };
+
+  onSubmit = (createFunction: ({}) => Promise<any>, groupId: string) => {
+    console.log(this.state);
+    const { closeCreateMode } = this.props;
+    const variables = { ...this.state, groupId };
+    createFunction({ variables }).then(() => closeCreateMode());
+  };
+
   public render() {
     const { fields, createFunction, closeCreateMode } = this.props;
 
@@ -50,15 +60,30 @@ export default class CreateDialog extends React.Component<
       );
     });
     return (
-      <FormContainer>
-        <form action="">{fieldsDisplay}</form>
-        <Button disabled={disabled} primary={true} onClick={createFunction}>
-          Create
-        </Button>
-        <Button warning={true} onClick={closeCreateMode}>
-          Cancel
-        </Button>
-      </FormContainer>
+      <Query query={GROUP_ID}>
+        {({ loading, data }) => {
+          if (loading) {
+            return <div>Loading...</div>;
+          } else {
+            const { defaultGroupId: groupId } = data;
+            return (
+              <FormContainer>
+                <form action="">{fieldsDisplay}</form>
+                <Button
+                  disabled={disabled}
+                  primary={true}
+                  onClick={() => this.onSubmit(createFunction, groupId)}
+                >
+                  Create
+                </Button>
+                <Button warning={true} onClick={closeCreateMode}>
+                  Cancel
+                </Button>
+              </FormContainer>
+            );
+          }
+        }}
+      </Query>
     );
   }
 }
@@ -74,4 +99,10 @@ const FormContainer = styled.div`
   background-color: white;
   padding: 1.5rem;
   z-index: 10;
+`;
+
+const GROUP_ID = gql`
+  query {
+    defaultGroupId @client
+  }
 `;

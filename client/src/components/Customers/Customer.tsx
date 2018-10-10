@@ -44,8 +44,7 @@ export default class Customer extends React.Component<CustomerProps, any> {
           if (loading) {
             return <div>Loading...</div>;
           } else {
-            console.log(data);
-            const { customer, defaultGroupId } = data.getCustomerById;
+            const { getCustomerById: customer, defaultGroupId } = data;
             const locationData = customer.locations.map(
               (location: { id: string; name: string; address: string }) => {
                 return {
@@ -118,40 +117,9 @@ export default class Customer extends React.Component<CustomerProps, any> {
                       linkTo="location"
                       openCreateMode={this.openCreateMode}
                     />
-                    {isCreateMode && defaultGroupId
-                    //Create New Location
-                    // <Create
-                    //   mutation={CREATE_LOCATION}
-                    //   closeCreateMode={this.closeCreateMode}
-                    //   fields={["name", "address"]}
-                    //   groupId={defaultGroupId}
-                    //   update={(
-                    //     // Update location list
-                    //     cache: any,
-                    //     {
-                    //       data: createCustomer
-                    //     }: { data: { createCustomer: {} } }
-                    //   ) => {
-                    //     const newCustomer = createCustomer.createCustomer;
-                    //     const query = {
-                    //       query: SINGLE_CUSTOMER_QUERY,
-                    //       variables: { customerId: this.props.customerId }
-                    //     };
-                    //     const { getCustomersFromGroup } = cache.readQuery(
-                    //       query
-                    //     );
-                    //     cache.writeQuery({
-                    //       ...query,
-                    //       data: {
-                    //         getCustomersFromGroup: [
-                    //           ...getCustomersFromGroup,
-                    //           newCustomer
-                    //         ]
-                    //       }
-                    //     });
-                    //   }}
-                    // />
-                    }
+                    {isCreateMode &&
+                      //TODO: create location
+                      defaultGroupId}
                   </>
                 ) : (
                   "No Locations for this customer"

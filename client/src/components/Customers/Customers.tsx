@@ -34,7 +34,6 @@ export default class Customers extends React.Component<CustomersProps, any> {
             return "loading...";
           } else {
             const { defaultGroupId } = data;
-            console.log(data);
             const customerData = data.getCustomersFromGroup.map(
               (customer: { id: string; name: string; locations: [] }) => {
                 return {
