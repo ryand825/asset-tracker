@@ -3,13 +3,14 @@ import styled from "styled-components";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
-import Button from "./Button";
-import Input from "./Input";
+import Button from "../common/Button";
+import Input from "../common/Input";
 
 export interface CreateDialogProps {
   fields: string[];
   createFunction: ({}) => Promise<any>;
   closeCreateMode: () => void;
+  optionalVariables?: {};
 }
 
 export default class CreateDialog extends React.Component<
@@ -34,9 +35,8 @@ export default class CreateDialog extends React.Component<
   };
 
   onSubmit = (createFunction: ({}) => Promise<any>, groupId: string) => {
-    console.log(this.state);
-    const { closeCreateMode } = this.props;
-    const variables = { ...this.state, groupId };
+    const { closeCreateMode, optionalVariables } = this.props;
+    const variables = { ...this.state, groupId, ...optionalVariables };
     createFunction({ variables }).then(() => closeCreateMode());
   };
 
