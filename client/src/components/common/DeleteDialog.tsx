@@ -1,9 +1,10 @@
 import * as React from "react";
+import styled from "styled-components";
 import { navigate } from "@reach/router";
 
 import Input from "./Input";
 import Button from "./Button";
-import "./delete.css";
+import cssVar from "../../variables";
 
 export interface DeleteDialogProps {
   deleteFunction: () => Promise<any>;
@@ -37,17 +38,16 @@ export default class DeleteDialog extends React.Component<
     const { cancelFunction, deleteName: name } = this.props;
 
     return (
-      <div className="delete-container">
+      <DeleteContainer>
         <div className="delete-message">
-          Are you sure you want to delete{" "}
-          <span className="delete-name">{name}</span>?
+          Are you sure you want to delete <DeleteName>{name}</DeleteName>?
         </div>
         <Input value={this.state.input} onChange={this.handleInput} />
-        <small className="delete-small">
+        <DeleteSmall>
           Retype name to confirm delete. <br />
           This can not be undone. <br />
           (Case-Sensitive)
-        </small>
+        </DeleteSmall>
         <span>
           <Button
             warning
@@ -58,7 +58,44 @@ export default class DeleteDialog extends React.Component<
           </Button>
           <Button onClick={cancelFunction}>Cancel</Button>
         </span>
-      </div>
+      </DeleteContainer>
     );
   }
 }
+
+const DeleteContainer = styled.div`
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid black;
+  border-radius: 9px;
+  background-color: white;
+  padding: 1.5rem;
+  z-index: 10;
+
+  @media (min-width: ${cssVar.FULLSCREEN}px) {
+     {
+      width: auto;
+    }
+  }
+`;
+const DeleteName = styled.span`
+  color: red;
+`;
+
+const DeleteSmall = styled.small`
+  font-size: 0.8em;
+  color: red;
+  margin-bottom: 1em;
+`;
+
+/* @media screen and (min-width: 600px) {
+  .delete-container {
+    width: auto;
+  }
+} */
