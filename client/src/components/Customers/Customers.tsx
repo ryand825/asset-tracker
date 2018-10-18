@@ -33,7 +33,6 @@ export default class Customers extends React.Component<CustomersProps, any> {
           if (loading) {
             return "loading...";
           } else {
-            const { defaultGroupId } = data;
             const customerData = data.getCustomersFromGroup.map(
               (customer: { id: string; name: string; locations: [] }) => {
                 return {
@@ -53,29 +52,8 @@ export default class Customers extends React.Component<CustomersProps, any> {
                 />
                 {isCreateMode && (
                   <CreateCustomer
-                    mutation={CREATE_CUSTOMER}
+                    updateQuery={CUSTOMER_QUERY}
                     closeCreateMode={this.closeCreateMode}
-                    fields={["name"]}
-                    groupId={defaultGroupId}
-                    update={(
-                      cache: any,
-                      { data: createCustomer }: { data: { createCustomer: {} } }
-                    ) => {
-                      const newCustomer = createCustomer.createCustomer;
-                      const query = {
-                        query: CUSTOMER_QUERY
-                      };
-                      const { getCustomersFromGroup } = cache.readQuery(query);
-                      cache.writeQuery({
-                        ...query,
-                        data: {
-                          getCustomersFromGroup: [
-                            ...getCustomersFromGroup,
-                            newCustomer
-                          ]
-                        }
-                      });
-                    }}
                   />
                 )}
               </>
@@ -103,18 +81,18 @@ const CUSTOMER_QUERY = gql`
   }
 `;
 
-const CREATE_CUSTOMER = gql`
-  mutation createCustomer($groupId: ID!, $name: String!) {
-    createCustomer(groupId: $groupId, name: $name) {
-      id
-      name
-      locations {
-        id
-      }
-      group {
-        id
-      }
-    }
-    defaultGroupId @client
-  }
-`;
+// const CREATE_CUSTOMER = gql`
+//   mutation createCustomer($groupId: ID!, $name: String!) {
+//     createCustomer(groupId: $groupId, name: $name) {
+//       id
+//       name
+//       locations {
+//         id
+//       }
+//       group {
+//         id
+//       }
+//     }
+//     defaultGroupId @client
+//   }
+// `;

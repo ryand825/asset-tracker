@@ -42,7 +42,6 @@ export default class Location extends React.Component<LocationProps, any> {
               locationId: this.props.locationId,
               groupId
             };
-            console.log(variables);
             return (
               <>
                 <h3>

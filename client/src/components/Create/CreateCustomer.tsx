@@ -1,61 +1,59 @@
 import * as React from "react";
-import { Mutation } from "react-apollo";
+import gql from "graphql-tag";
 
-import Modal from "../common/Modal";
-import CreateDialog from "../common/CreateDialog";
+import Creator from "./Creator";
 
-export interface CreateCustomerProps {
-  groupId: string;
+export interface CreateLocationProps {
   closeCreateMode: () => void;
-  fields: string[];
-  mutation: any;
-  update: any;
+  updateQuery: any;
 }
 
-export default class CreateCustomer extends React.Component<
-  CreateCustomerProps,
+export default class CreateLocation extends React.Component<
+  CreateLocationProps,
   any
 > {
-  // Initiates object for initial state
-  private fields = this.props.fields.reduce((obj, value) => {
-    obj[value] = "";
-    return obj;
-  }, {});
-
-  state = { ...this.fields };
-
-  onChangeHandler = (e: any) => {
-    const { name, value } = e.target;
-    let formState = { ...this.state };
-    formState[name] = value;
-
-    this.setState({
-      ...formState
-    });
-  };
-
   public render() {
-    const { closeCreateMode } = this.props;
-
-    let disabled = true;
-    for (let value in this.state) {
-      disabled = this.state[value].length < 1;
-      if (disabled) break;
-    }
-
+    const { closeCreateMode, updateQuery: CUSTOMER_QUERY } = this.props;
     return (
-      <Mutation mutation={this.props.mutation} update={this.props.update}>
-        {createCustomer => (
-          <>
-            <Modal onClick={closeCreateMode} />
-            <CreateDialog
-              closeCreateMode={closeCreateMode}
-              createFunction={createCustomer}
-              fields={["name"]}
-            />
-          </>
-        )}
-      </Mutation>
+      <div>
+        <Creator
+          mutation={CREATE_CUSTOMER}
+          closeCreateMode={closeCreateMode}
+          fields={["name"]}
+          update={(
+            cache: any,
+            { data: createCustomer }: { data: { createCustomer: {} } }
+          ) => {
+            const newCustomer = createCustomer.createCustomer;
+            const query = {
+              query: CUSTOMER_QUERY
+            };
+            const { getCustomersFromGroup } = cache.readQuery(query);
+            cache.writeQuery({
+              ...query,
+              data: {
+                getCustomersFromGroup: [...getCustomersFromGroup, newCustomer]
+              }
+            });
+          }}
+        />
+      </div>
     );
   }
 }
+
+const CREATE_CUSTOMER = gql`
+  mutation createCustomer($groupId: ID!, $name: String!) {
+    createCustomer(groupId: $groupId, name: $name) {
+      id
+      name
+      locations {
+        id
+      }
+      group {
+        id
+      }
+    }
+    defaultGroupId @client
+  }
+`;

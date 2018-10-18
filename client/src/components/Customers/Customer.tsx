@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 
 import ListView from "../common/ListView";
-// import Create from "../Create/Create";
+import CreateLocation from "../Create/CreateLocation";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import DeleteDialog from "../common/DeleteDialog";
@@ -44,7 +44,7 @@ export default class Customer extends React.Component<CustomerProps, any> {
           if (loading) {
             return <div>Loading...</div>;
           } else {
-            const { getCustomerById: customer, defaultGroupId } = data;
+            const { getCustomerById: customer } = data;
             const locationData = customer.locations.map(
               (location: { id: string; name: string; address: string }) => {
                 return {
@@ -117,9 +117,13 @@ export default class Customer extends React.Component<CustomerProps, any> {
                       linkTo="location"
                       openCreateMode={this.openCreateMode}
                     />
-                    {isCreateMode &&
+                    {isCreateMode && (
                       //TODO: create location
-                      defaultGroupId}
+                      <CreateLocation
+                        customerId={customerId}
+                        closeCreateMode={this.closeCreateMode}
+                      />
+                    )}
                   </>
                 ) : (
                   "No Locations for this customer"
