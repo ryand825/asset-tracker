@@ -34,14 +34,6 @@ export default class Customer extends React.Component<
     this.setState({ isCreateMode: false });
   };
 
-  handleDelete = () => {
-    this.setState({ deleteMode: true });
-  };
-
-  cancelDelete = () => {
-    this.setState({ deleteMode: false });
-  };
-
   deleteToggle = () => {
     this.setState((prevState: CustomerState) => {
       return { deleteMode: !prevState.deleteMode };
