@@ -1,13 +1,13 @@
 import * as React from "react";
-import { Query, Mutation } from "react-apollo";
+import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 
 import ListView from "../common/ListView";
 import CreateLocation from "../Create/CreateLocation";
-import Modal from "../common/Modal";
 import Button from "../common/Button";
-import DeleteDialog from "../common/DeleteDialog";
+// import DeleteDialog from "../Delete/DeleteDialog";
+import DeleteCustomer from "../Delete/DeleteCustomer";
 import cssVar from "../../variables";
 
 export interface CustomerProps {
@@ -15,7 +15,15 @@ export interface CustomerProps {
   customerId: string;
 }
 
-export default class Customer extends React.Component<CustomerProps, any> {
+export interface CustomerState {
+  deleteMode: boolean;
+  isCreateMode: boolean;
+}
+
+export default class Customer extends React.Component<
+  CustomerProps,
+  CustomerState
+> {
   state = { deleteMode: false, isCreateMode: false };
 
   openCreateMode = () => {
@@ -32,6 +40,12 @@ export default class Customer extends React.Component<CustomerProps, any> {
 
   cancelDelete = () => {
     this.setState({ deleteMode: false });
+  };
+
+  deleteToggle = () => {
+    this.setState((prevState: CustomerState) => {
+      return { deleteMode: !prevState.deleteMode };
+    });
   };
   public render() {
     const { isCreateMode, deleteMode } = this.state;
@@ -54,61 +68,25 @@ export default class Customer extends React.Component<CustomerProps, any> {
                 };
               }
             );
-
-            const { name, id: customerId } = customer;
-
+            const {
+              name,
+              id: customerId
+            }: { name: string; id: string } = customer;
             return (
               <div>
                 <Header>
                   <h3>{name}</h3>
-                  {/* DELETE MUTATION */}
-                  <Mutation
-                    update={(
-                      cache: any,
-                      {
-                        data: deleteCustomer
-                      }: { data: { deleteCustomer: { id: string } } }
-                    ) => {
-                      const deleted = deleteCustomer.deleteCustomer;
-                      const query = {
-                        query: CUSTOMER_QUERY
-                      };
-                      const { getCustomersFromGroup } = cache.readQuery(query);
-                      const newCustomerList = getCustomersFromGroup.filter(
-                        (customer: { id: string }) => {
-                          return customer.id !== deleted.id;
-                        }
-                      );
-                      cache.writeQuery({
-                        ...query,
-                        data: {
-                          getCustomersFromGroup: [...newCustomerList]
-                        }
-                      });
-                    }}
-                    mutation={DELETE_CUSTOMER}
-                  >
-                    {deleteCustomer => (
-                      <>
-                        <Button warning onClick={this.handleDelete}>
-                          Delete
-                        </Button>
-                        {deleteMode && (
-                          <>
-                            <Modal onClick={this.cancelDelete} />
-                            <DeleteDialog
-                              redirectTo="/customers"
-                              deleteName={name}
-                              cancelFunction={this.cancelDelete}
-                              deleteFunction={() =>
-                                deleteCustomer({ variables: { customerId } })
-                              }
-                            />
-                          </>
-                        )}
-                      </>
-                    )}
-                  </Mutation>
+
+                  <Button warning onClick={this.deleteToggle}>
+                    Delete
+                  </Button>
+                  {deleteMode && (
+                    <DeleteCustomer
+                      customerId={customerId}
+                      cancelDelete={this.deleteToggle}
+                      customerName={name}
+                    />
+                  )}
                 </Header>
                 {locationData.length > 0 ? (
                   <>
@@ -160,41 +138,6 @@ const SINGLE_CUSTOMER_QUERY = gql`
         id
         name
         address
-      }
-    }
-    defaultGroupId @client
-  }
-`;
-
-const DELETE_CUSTOMER = gql`
-  mutation deleteCustomer($customerId: ID!) {
-    deleteCustomer(customerId: $customerId) {
-      name
-      id
-    }
-  }
-`;
-
-// const CREATE_LOCATION = gql`
-//   mutation createLocation($name: String, $customerId: ID!, $address: String) {
-//     createLocation(name: $name, customerId: $customerId, address: $address) {
-//       id
-//       name
-//       address
-//     }
-//   }
-// `;
-
-const CUSTOMER_QUERY = gql`
-  query getCustomersFromGroup {
-    getCustomersFromGroup(groupId: "cjlms583gntq40b17a9ama6ae") {
-      id
-      name
-      locations {
-        id
-      }
-      group {
-        id
       }
     }
     defaultGroupId @client

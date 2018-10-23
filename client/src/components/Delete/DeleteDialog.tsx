@@ -2,8 +2,9 @@ import * as React from "react";
 import styled from "styled-components";
 import { navigate } from "@reach/router";
 
-import Input from "./Input";
-import Button from "./Button";
+import Input from "../common/Input";
+import Button from "../common/Button";
+import Modal from "../common/Modal";
 import cssVar from "../../variables";
 
 export interface DeleteDialogProps {
@@ -38,27 +39,30 @@ export default class DeleteDialog extends React.Component<
     const { cancelFunction, deleteName: name } = this.props;
 
     return (
-      <DeleteContainer>
-        <div className="delete-message">
-          Are you sure you want to delete <DeleteName>{name}</DeleteName>?
-        </div>
-        <Input value={this.state.input} onChange={this.handleInput} />
-        <DeleteSmall>
-          Retype name to confirm delete. <br />
-          This can not be undone. <br />
-          (Case-Sensitive)
-        </DeleteSmall>
-        <span>
-          <Button
-            warning
-            disabled={!this.state.nameMatch}
-            onClick={this.handleDelete}
-          >
-            DELETE
-          </Button>
-          <Button onClick={cancelFunction}>Cancel</Button>
-        </span>
-      </DeleteContainer>
+      <>
+        <Modal onClick={cancelFunction} />
+        <DeleteContainer>
+          <div className="delete-message">
+            Are you sure you want to delete <DeleteName>{name}</DeleteName>?
+          </div>
+          <Input value={this.state.input} onChange={this.handleInput} />
+          <DeleteSmall>
+            Retype name to confirm delete. <br />
+            This can not be undone. <br />
+            (Case-Sensitive)
+          </DeleteSmall>
+          <span>
+            <Button
+              warning
+              disabled={!this.state.nameMatch}
+              onClick={this.handleDelete}
+            >
+              DELETE
+            </Button>
+            <Button onClick={cancelFunction}>Cancel</Button>
+          </span>
+        </DeleteContainer>
+      </>
     );
   }
 }
