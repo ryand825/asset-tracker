@@ -3,14 +3,13 @@ import "./App.css";
 
 import { Router } from "@reach/router";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 
+import { GET_USER } from "./gql/user";
 import NavBar from "./components/Navigation/NavBar";
 import Customers from "./components/Customers/Customers";
 import Customer from "./components/Customers/Customer";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Location from "./components/Location/Location";
-// import NewCustomer from "./components/Create/NewCustomer";
 
 export default class App extends React.Component {
   public render() {
@@ -21,16 +20,17 @@ export default class App extends React.Component {
             return "Loading";
           } else {
             const { groups, defaultGroup } = data.getCurrentUser;
-            client.writeData({ data: { defaultGroupId: defaultGroup.id } });
+            const { id: groupId }: { id: string } = defaultGroup;
+            client.writeData({ data: { defaultGroupId: groupId } });
             return (
               <>
                 <NavBar groups={groups} defaultGroup={defaultGroup} />
                 <Router>
                   <Dashboard path="/dashboard" />
-                  <Customers path="/customers">
+                  <Customers groupId={groupId} path="/customers">
                     {/* <NewCustomer path="/create/:groupId" /> */}
                   </Customers>
-                  <Customer path="/customer/:customerId" customerId="" />
+                  <Customer groupId={groupId} path="/customer/:customerId" />
                   <Location path="/location/:locationId" locationId="" />
                 </Router>
               </>
@@ -41,21 +41,3 @@ export default class App extends React.Component {
     );
   }
 }
-
-const GET_USER = gql`
-  query {
-    getCurrentUser {
-      id
-      name
-      groups {
-        id
-        name
-      }
-      defaultGroup {
-        id
-        name
-      }
-    }
-    defaultGroupId @client
-  }
-`;

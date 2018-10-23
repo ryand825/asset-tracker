@@ -1,6 +1,7 @@
 import * as React from "react";
-import gql from "graphql-tag";
 
+import { CREATE_LOCATION } from "../../gql/location";
+import { SINGLE_CUSTOMER_QUERY } from "../../gql/customer";
 import Creator from "./Creator";
 
 export interface CreateLocationProps {
@@ -46,28 +47,3 @@ export default class CreateLocation extends React.Component<
     );
   }
 }
-
-const CREATE_LOCATION = gql`
-  mutation createLocation($name: String!, $customerId: ID!, $address: String!) {
-    createLocation(name: $name, customerId: $customerId, address: $address) {
-      id
-      name
-      address
-    }
-  }
-`;
-
-const SINGLE_CUSTOMER_QUERY = gql`
-  query getCustomerById($customerId: ID!) {
-    getCustomerById(customerId: $customerId) {
-      name
-      id
-      locations {
-        id
-        name
-        address
-      }
-    }
-    defaultGroupId @client
-  }
-`;

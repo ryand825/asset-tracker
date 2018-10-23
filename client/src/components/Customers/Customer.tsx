@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 import styled from "styled-components";
 
 import ListView from "../common/ListView";
@@ -9,10 +8,12 @@ import Button from "../common/Button";
 // import DeleteDialog from "../Delete/DeleteDialog";
 import DeleteCustomer from "../Delete/DeleteCustomer";
 import cssVar from "../../variables";
+import { SINGLE_CUSTOMER_QUERY } from "../../gql/customer";
 
 export interface CustomerProps {
   path: string;
-  customerId: string;
+  customerId?: string;
+  groupId: string;
 }
 
 export interface CustomerState {
@@ -41,6 +42,7 @@ export default class Customer extends React.Component<
   };
   public render() {
     const { isCreateMode, deleteMode } = this.state;
+    const { groupId } = this.props;
     return (
       <Query
         query={SINGLE_CUSTOMER_QUERY}
@@ -77,6 +79,7 @@ export default class Customer extends React.Component<
                       customerId={customerId}
                       cancelDelete={this.deleteToggle}
                       customerName={name}
+                      groupId={groupId}
                     />
                   )}
                 </Header>
@@ -118,20 +121,5 @@ const Header = styled.span`
     & h3 {
       margin-right: 2em;
     }
-  }
-`;
-
-const SINGLE_CUSTOMER_QUERY = gql`
-  query getCustomerById($customerId: ID!) {
-    getCustomerById(customerId: $customerId) {
-      name
-      id
-      locations {
-        id
-        name
-        address
-      }
-    }
-    defaultGroupId @client
   }
 `;

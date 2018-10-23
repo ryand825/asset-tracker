@@ -1,7 +1,10 @@
 import * as React from "react";
 import { Query, Mutation } from "react-apollo";
-import gql from "graphql-tag";
 
+import {
+  SINGLE_LOCATION_QUERY,
+  CREATE_LOCATION_NOTE
+} from "../../gql/location";
 import ListView from "../common/ListView";
 import Notes from "../common/Notes";
 
@@ -90,60 +93,3 @@ export default class Location extends React.Component<LocationProps, any> {
     );
   }
 }
-
-const SINGLE_LOCATION_QUERY = gql`
-  query getLocationById($locationId: ID!) {
-    getLocationById(locationId: $locationId) {
-      name
-      id
-      address
-      notes {
-        id
-        content
-        archived
-        updatedAt
-        createdBy {
-          id
-          name
-        }
-      }
-      customer {
-        id
-        name
-      }
-      assets {
-        serial
-        description
-        id
-        equipment {
-          name
-          model
-          id
-        }
-      }
-    }
-    defaultGroupId @client
-  }
-`;
-
-const CREATE_LOCATION_NOTE = gql`
-  mutation addNote($locationId: ID!, $groupId: ID!, $content: String!) {
-    createLocationNote(
-      locationId: $locationId
-      groupId: $groupId
-      content: $content
-    ) {
-      id
-      notes(last: 1) {
-        id
-        content
-        archived
-        updatedAt
-        createdBy {
-          id
-          name
-        }
-      }
-    }
-  }
-`;

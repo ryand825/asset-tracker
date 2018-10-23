@@ -1,13 +1,14 @@
 import * as React from "react";
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
 
+import { CUSTOMER_QUERY, DELETE_CUSTOMER } from "../../gql/customer";
 import DeleteDialog from "./DeleteDialog";
 
 export interface DeleteCustomerProps {
   cancelDelete: () => void;
   customerId: string;
   customerName: string;
+  groupId: string;
 }
 
 export default class DeleteCustomer extends React.Component<
@@ -15,7 +16,7 @@ export default class DeleteCustomer extends React.Component<
   any
 > {
   public render() {
-    const { customerId, cancelDelete, customerName } = this.props;
+    const { customerId, cancelDelete, customerName, groupId } = this.props;
     return (
       <div>
         <Mutation
@@ -27,7 +28,8 @@ export default class DeleteCustomer extends React.Component<
           ) => {
             const deleted = deleteCustomer.deleteCustomer;
             const query = {
-              query: CUSTOMER_QUERY
+              query: CUSTOMER_QUERY,
+              variables: { groupId }
             };
             const { getCustomersFromGroup } = cache.readQuery(query);
             const newCustomerList = getCustomersFromGroup.filter(
@@ -61,28 +63,3 @@ export default class DeleteCustomer extends React.Component<
     );
   }
 }
-
-const CUSTOMER_QUERY = gql`
-  query getCustomersFromGroup {
-    getCustomersFromGroup(groupId: "cjlms583gntq40b17a9ama6ae") {
-      id
-      name
-      locations {
-        id
-      }
-      group {
-        id
-      }
-    }
-    defaultGroupId @client
-  }
-`;
-
-const DELETE_CUSTOMER = gql`
-  mutation deleteCustomer($customerId: ID!) {
-    deleteCustomer(customerId: $customerId) {
-      name
-      id
-    }
-  }
-`;

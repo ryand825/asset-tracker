@@ -1,11 +1,12 @@
 import * as React from "react";
-import gql from "graphql-tag";
 
+import { CREATE_CUSTOMER } from "../../gql/customer";
 import Creator from "./Creator";
 
 export interface CreateLocationProps {
   closeCreateMode: () => void;
   updateQuery: any;
+  groupId: string;
 }
 
 export default class CreateLocation extends React.Component<
@@ -13,7 +14,11 @@ export default class CreateLocation extends React.Component<
   any
 > {
   public render() {
-    const { closeCreateMode, updateQuery: CUSTOMER_QUERY } = this.props;
+    const {
+      closeCreateMode,
+      updateQuery: CUSTOMER_QUERY,
+      groupId
+    } = this.props;
     return (
       <div>
         <Creator
@@ -26,7 +31,8 @@ export default class CreateLocation extends React.Component<
           ) => {
             const newCustomer = createCustomer.createCustomer;
             const query = {
-              query: CUSTOMER_QUERY
+              query: CUSTOMER_QUERY,
+              variables: { groupId }
             };
             const { getCustomersFromGroup } = cache.readQuery(query);
             cache.writeQuery({
@@ -41,19 +47,3 @@ export default class CreateLocation extends React.Component<
     );
   }
 }
-
-const CREATE_CUSTOMER = gql`
-  mutation createCustomer($groupId: ID!, $name: String!) {
-    createCustomer(groupId: $groupId, name: $name) {
-      id
-      name
-      locations {
-        id
-      }
-      group {
-        id
-      }
-    }
-    defaultGroupId @client
-  }
-`;

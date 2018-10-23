@@ -1,12 +1,13 @@
 import * as React from "react";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 
+import { CUSTOMER_QUERY } from "../../gql/customer";
 import ListView from "../common/ListView";
 import CreateCustomer from "../Create/CreateCustomer";
 
 export interface CustomersProps {
   path: string;
+  groupId: string;
 }
 
 export interface createCustomer {
@@ -26,9 +27,10 @@ export default class Customers extends React.Component<CustomersProps, any> {
 
   public render() {
     const { isCreateMode } = this.state;
+    const { groupId } = this.props;
 
     return (
-      <Query query={CUSTOMER_QUERY}>
+      <Query query={CUSTOMER_QUERY} variables={{ groupId }}>
         {({ loading, data }) => {
           if (loading) {
             return "loading...";
@@ -52,6 +54,7 @@ export default class Customers extends React.Component<CustomersProps, any> {
                 />
                 {isCreateMode && (
                   <CreateCustomer
+                    groupId={groupId}
                     updateQuery={CUSTOMER_QUERY}
                     closeCreateMode={this.closeCreateMode}
                   />
@@ -64,35 +67,3 @@ export default class Customers extends React.Component<CustomersProps, any> {
     );
   }
 }
-
-const CUSTOMER_QUERY = gql`
-  query getCustomersFromGroup {
-    getCustomersFromGroup(groupId: "cjlms583gntq40b17a9ama6ae") {
-      id
-      name
-      locations {
-        id
-      }
-      group {
-        id
-      }
-    }
-    defaultGroupId @client
-  }
-`;
-
-// const CREATE_CUSTOMER = gql`
-//   mutation createCustomer($groupId: ID!, $name: String!) {
-//     createCustomer(groupId: $groupId, name: $name) {
-//       id
-//       name
-//       locations {
-//         id
-//       }
-//       group {
-//         id
-//       }
-//     }
-//     defaultGroupId @client
-//   }
-// `;
