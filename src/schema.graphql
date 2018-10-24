@@ -30,6 +30,7 @@ type Mutation {
   ): Asset
   createLocationNote(locationId: ID!, content: String!, groupId: ID!): Location
   deleteCustomer(customerId: ID!): Customer
+  deleteLocation(locationId: ID!): Location
 }
 
 type User {

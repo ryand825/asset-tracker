@@ -66,3 +66,11 @@ export const CREATE_LOCATION_NOTE = gql`
     }
   }
 `;
+
+export const DELETE_LOCATION = gql`
+  mutation deleteLocation($locationId: ID!) {
+    deleteLocation(locationId: $locationId) {
+      id
+    }
+  }
+`;
