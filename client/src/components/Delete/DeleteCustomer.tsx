@@ -18,48 +18,44 @@ export default class DeleteCustomer extends React.Component<
   public render() {
     const { customerId, cancelDelete, customerName, groupId } = this.props;
     return (
-      <div>
-        <Mutation
-          update={(
-            cache: any,
-            {
-              data: deleteCustomer
-            }: { data: { deleteCustomer: { id: string } } }
-          ) => {
-            const deleted = deleteCustomer.deleteCustomer;
-            const query = {
-              query: CUSTOMER_QUERY,
-              variables: { groupId }
-            };
-            const { getCustomersFromGroup } = cache.readQuery(query);
-            const newCustomerList = getCustomersFromGroup.filter(
-              (customer: { id: string }) => {
-                return customer.id !== deleted.id;
+      <Mutation
+        update={(
+          cache: any,
+          { data: deleteCustomer }: { data: { deleteCustomer: { id: string } } }
+        ) => {
+          const deleted = deleteCustomer.deleteCustomer;
+          const query = {
+            query: CUSTOMER_QUERY,
+            variables: { groupId }
+          };
+          const { getCustomersFromGroup } = cache.readQuery(query);
+          const newCustomerList = getCustomersFromGroup.filter(
+            (customer: { id: string }) => {
+              return customer.id !== deleted.id;
+            }
+          );
+          cache.writeQuery({
+            ...query,
+            data: {
+              getCustomersFromGroup: [...newCustomerList]
+            }
+          });
+        }}
+        mutation={DELETE_CUSTOMER}
+      >
+        {deleteCustomer => (
+          <>
+            <DeleteDialog
+              redirectTo="/customers"
+              deleteName={customerName}
+              cancelFunction={cancelDelete}
+              deleteFunction={() =>
+                deleteCustomer({ variables: { customerId } })
               }
-            );
-            cache.writeQuery({
-              ...query,
-              data: {
-                getCustomersFromGroup: [...newCustomerList]
-              }
-            });
-          }}
-          mutation={DELETE_CUSTOMER}
-        >
-          {deleteCustomer => (
-            <>
-              <DeleteDialog
-                redirectTo="/customers"
-                deleteName={customerName}
-                cancelFunction={cancelDelete}
-                deleteFunction={() =>
-                  deleteCustomer({ variables: { customerId } })
-                }
-              />
-            </>
-          )}
-        </Mutation>
-      </div>
+            />
+          </>
+        )}
+      </Mutation>
     );
   }
 }

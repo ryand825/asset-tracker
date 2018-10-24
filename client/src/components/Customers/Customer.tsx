@@ -1,13 +1,11 @@
 import * as React from "react";
 import { Query } from "react-apollo";
-import styled from "styled-components";
 
+import ListPageHeader from "../common/ListPageHeader";
 import ListView from "../common/ListView";
+import CreateFirst from "../common/CreateFirst";
 import CreateLocation from "../Create/CreateLocation";
-import Button from "../common/Button";
-// import DeleteDialog from "../Delete/DeleteDialog";
 import DeleteCustomer from "../Delete/DeleteCustomer";
-import cssVar from "../../variables";
 import { SINGLE_CUSTOMER_QUERY } from "../../gql/customer";
 
 export interface CustomerProps {
@@ -68,21 +66,15 @@ export default class Customer extends React.Component<
             }: { name: string; id: string } = customer;
             return (
               <div>
-                <Header>
-                  <h3>{name}</h3>
-
-                  <Button warning onClick={this.deleteToggle}>
-                    Delete
-                  </Button>
-                  {deleteMode && (
-                    <DeleteCustomer
-                      customerId={customerId}
-                      cancelDelete={this.deleteToggle}
-                      customerName={name}
-                      groupId={groupId}
-                    />
-                  )}
-                </Header>
+                <ListPageHeader title={name} deleteToggle={this.deleteToggle} />
+                {deleteMode && (
+                  <DeleteCustomer
+                    customerId={customerId}
+                    cancelDelete={this.deleteToggle}
+                    customerName={name}
+                    groupId={groupId}
+                  />
+                )}
                 {locationData.length > 0 ? (
                   <>
                     <ListView
@@ -90,16 +82,18 @@ export default class Customer extends React.Component<
                       linkTo="location"
                       openCreateMode={this.openCreateMode}
                     />
-                    {isCreateMode && (
-                      //TODO: create location
-                      <CreateLocation
-                        customerId={customerId}
-                        closeCreateMode={this.closeCreateMode}
-                      />
-                    )}
                   </>
                 ) : (
-                  "No Locations for this customer"
+                  <CreateFirst
+                    name={"Location"}
+                    onClick={this.openCreateMode}
+                  />
+                )}
+                {isCreateMode && (
+                  <CreateLocation
+                    customerId={customerId}
+                    closeCreateMode={this.closeCreateMode}
+                  />
                 )}
               </div>
             );
@@ -109,17 +103,3 @@ export default class Customer extends React.Component<
     );
   }
 }
-
-const Header = styled.span`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-
-  @media (min-width: ${cssVar.FULLSCREEN}px) {
-    justify-content: flex-start;
-
-    & h3 {
-      margin-right: 2em;
-    }
-  }
-`;

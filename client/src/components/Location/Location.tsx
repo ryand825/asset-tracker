@@ -5,6 +5,9 @@ import {
   SINGLE_LOCATION_QUERY,
   CREATE_LOCATION_NOTE
 } from "../../gql/location";
+// import Button from "../common/Button";
+import DeleteLocation from "../Delete/DeleteLocation";
+import ListPageHeader from "../common/ListPageHeader";
 import ListView from "../common/ListView";
 import Notes from "../common/Notes";
 
@@ -13,8 +16,33 @@ export interface LocationProps {
   locationId: string;
 }
 
-export default class Location extends React.Component<LocationProps, any> {
+export interface LocationState {
+  deleteMode: boolean;
+  isCreateMode: boolean;
+}
+
+export default class Location extends React.Component<
+  LocationProps,
+  LocationState
+> {
+  state = { deleteMode: false, isCreateMode: false };
+
+  openCreateMode = () => {
+    this.setState({ isCreateMode: true });
+  };
+
+  closeCreateMode = () => {
+    this.setState({ isCreateMode: false });
+  };
+
+  deleteToggle = () => {
+    this.setState((prevState: LocationState) => {
+      return { deleteMode: !prevState.deleteMode };
+    });
+  };
+
   public render() {
+    const { deleteMode } = this.state;
     return (
       <Query
         query={SINGLE_LOCATION_QUERY}
@@ -47,10 +75,35 @@ export default class Location extends React.Component<LocationProps, any> {
             };
             return (
               <>
-                <h3>
+                {/* <h3>
                   {name} - {customer.name}
                 </h3>
-                <h4>{address}</h4>
+                <Button warning onClick={this.deleteToggle}>
+                  Delete
+                </Button>
+                {deleteMode && (
+                  <DeleteLocation
+                    customerId={customer.id}
+                    cancelDelete={this.deleteToggle}
+                    locationName={name}
+                    locationId={this.props.locationId}
+                  />
+                )} */}
+
+                <ListPageHeader
+                  title={name}
+                  titleAffix={customer.name}
+                  subTitle={address}
+                  deleteToggle={this.deleteToggle}
+                />
+                {deleteMode && (
+                  <DeleteLocation
+                    customerId={customer.id}
+                    cancelDelete={this.deleteToggle}
+                    locationName={name}
+                    locationId={this.props.locationId}
+                  />
+                )}
                 {listData.length > 0 ? (
                   <ListView listData={listData} linkTo="asset" />
                 ) : (
