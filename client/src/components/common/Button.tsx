@@ -54,6 +54,7 @@ const StyledButton = styled<{ color: string; disabled: boolean }, "button">(
     background-color: white;
     box-shadow: ${props =>
       `0px 0px 6px 1px ${props.color === "white" ? "gray" : props.color}`};
-    color: ${props => (props.color === "white" ? "gray" : props.color)};
+    // color: ${props => (props.color === "white" ? "gray" : props.color)};
+    color: black;
   }
 `;
