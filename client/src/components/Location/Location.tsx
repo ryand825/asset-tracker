@@ -5,7 +5,6 @@ import {
   SINGLE_LOCATION_QUERY,
   CREATE_LOCATION_NOTE
 } from "../../gql/location";
-// import Button from "../common/Button";
 import DeleteLocation from "../Delete/DeleteLocation";
 import ListPageHeader from "../common/ListPageHeader";
 import ListView from "../common/ListView";
@@ -75,21 +74,6 @@ export default class Location extends React.Component<
             };
             return (
               <>
-                {/* <h3>
-                  {name} - {customer.name}
-                </h3>
-                <Button warning onClick={this.deleteToggle}>
-                  Delete
-                </Button>
-                {deleteMode && (
-                  <DeleteLocation
-                    customerId={customer.id}
-                    cancelDelete={this.deleteToggle}
-                    locationName={name}
-                    locationId={this.props.locationId}
-                  />
-                )} */}
-
                 <ListPageHeader
                   title={name}
                   titleAffix={customer.name}
