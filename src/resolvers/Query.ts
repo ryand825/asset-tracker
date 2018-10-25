@@ -1,134 +1,124 @@
 import { getUserId } from "../utils";
+import equipmentQueries from "./queries/Equipment";
 
-async function getCurrentUser(parents, args, context, info) {
-  const userId = getUserId(context);
-  if (!userId) throw new Error("Not Logged In");
-  const user = await context.db.query.user({ where: { id: userId } }, info);
-  console.log("#######################", user);
-  if (!user.default) {
-    console.log("no default");
-  }
+const Queries = {
+  ...equipmentQueries,
+  getCurrentUser: async (parents, args, context, info) => {
+    const userId = getUserId(context);
+    if (!userId) throw new Error("Not Logged In");
+    const user = await context.db.query.user({ where: { id: userId } }, info);
+    if (!user.default) {
+      console.log("no default");
+    }
 
-  return user;
-}
+    return user;
+  },
 
-async function getLatestUpdates(parents, args, context, info) {
-  const userId = getUserId(context);
-  if (!userId) throw new Error("Not Logged In");
+  getLatestUpdates: async (parents, args, context, info) => {
+    const userId = getUserId(context);
+    if (!userId) throw new Error("Not Logged In");
 
-  console.log("#######################################");
-  console.log(args.groupId);
-  console.log("#######################################");
+    // let latest = { locations: [{}], customers: [{}], assets: [{}] };
+    const latest = {
+      assets: await context.db.query.assets(
+        {
+          where: {
+            equipment: {
+              category: {
+                group: { id: args.groupId, users_some: { id: userId } }
+              }
+            }
+          },
+          last: args.last,
+          orderBy: "updatedAt_ASC"
+        },
+        `{id serial description updatedAt equipment{id name}}`
+      ),
 
-  // let latest = { locations: [{}], customers: [{}], assets: [{}] };
-  const latest = {
-    assets: await context.db.query.assets(
-      {
-        where: {
-          equipment: {
-            category: {
+      customers: await context.db.query.customers(
+        {
+          where: { group: { id: args.groupId, users_some: { id: userId } } },
+          last: args.last,
+          orderBy: "updatedAt_ASC"
+        },
+        `{id name updatedAt}`
+      ),
+
+      locations: await context.db.query.locations(
+        {
+          where: {
+            customer: {
               group: { id: args.groupId, users_some: { id: userId } }
             }
-          }
+          },
+          last: args.last,
+          orderBy: "updatedAt_ASC"
         },
-        last: args.last,
-        orderBy: "updatedAt_ASC"
-      },
-      `{id serial description updatedAt equipment{id name}}`
-    ),
+        `{id name updatedAt customer{id name}}`
+      )
+    };
+    return latest;
+  },
 
-    customers: await context.db.query.customers(
+  getCustomersFromGroup: async (parents, args, context, info) => {
+    const userId = getUserId(context);
+    if (!userId) throw new Error("Not Logged In");
+
+    const customers = await context.db.query.customers(
       {
-        where: { group: { id: args.groupId, users_some: { id: userId } } },
-        last: args.last,
-        orderBy: "updatedAt_ASC"
-      },
-      `{id name updatedAt}`
-    ),
-
-    locations: await context.db.query.locations(
-      {
-        where: {
-          customer: { group: { id: args.groupId, users_some: { id: userId } } }
-        },
-        last: args.last,
-        orderBy: "updatedAt_ASC"
-      },
-      `{id name updatedAt customer{id name}}`
-    )
-  };
-  return latest;
-}
-
-async function getCustomersFromGroup(parents, args, context, info) {
-  const userId = getUserId(context);
-  if (!userId) throw new Error("Not Logged In");
-
-  const customers = await context.db.query.customers(
-    {
-      where: { group: { id: args.groupId, users_some: { id: userId } } }
-    },
-    info
-  );
-
-  return customers;
-}
-
-async function getCustomerById(parents, args, context, info) {
-  const userId = getUserId(context);
-  if (!userId) throw new Error("Not Logged In");
-
-  const userInGroup = await context.db.exists.Customer({
-    id: args.customerId,
-    group: {
-      users_some: { id: userId }
-    }
-  });
-
-  if (userInGroup) {
-    return await context.db.query.customer(
-      {
-        where: { id: args.customerId }
+        where: { group: { id: args.groupId, users_some: { id: userId } } }
       },
       info
     );
-  }
-  throw new Error("Not Authorized to access customers from this group");
-}
 
-async function getLocationById(parents, args, context, info) {
-  const userId = getUserId(context);
-  if (!userId) throw new Error("Not Logged In");
-  console.log("###################################### log");
-  console.log("###################################### log");
-  console.log("###################################### log");
-  console.log("###################################### log");
-  console.log("###################################### log");
+    return customers;
+  },
 
-  const userInGroup = await context.db.exists.Location({
-    id: args.locationId,
-    customer: {
+  getCustomerById: async (parents, args, context, info) => {
+    const userId = getUserId(context);
+    if (!userId) throw new Error("Not Logged In");
+
+    const userInGroup = await context.db.exists.Customer({
+      id: args.customerId,
       group: {
         users_some: { id: userId }
       }
+    });
+
+    if (userInGroup) {
+      return await context.db.query.customer(
+        {
+          where: { id: args.customerId }
+        },
+        info
+      );
     }
-  });
+    throw new Error("Not Authorized to access customers from this group");
+  },
 
-  if (userInGroup) {
-    return await context.db.query.location(
-      {
-        where: { id: args.locationId }
-      },
-      info
-    );
+  getLocationById: async (parents, args, context, info) => {
+    const userId = getUserId(context);
+    if (!userId) throw new Error("Not Logged In");
+
+    const userInGroup = await context.db.exists.Location({
+      id: args.locationId,
+      customer: {
+        group: {
+          users_some: { id: userId }
+        }
+      }
+    });
+
+    if (userInGroup) {
+      return await context.db.query.location(
+        {
+          where: { id: args.locationId }
+        },
+        info
+      );
+    }
+    throw new Error("Not Authorized to access locations from this group");
   }
-  throw new Error("Not Authorized to access locations from this group");
-}
-
-export {
-  getCustomersFromGroup,
-  getCurrentUser,
-  getLatestUpdates,
-  getCustomerById,
-  getLocationById
 };
+
+export default Queries;

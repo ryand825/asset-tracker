@@ -2,7 +2,7 @@ import { GraphQLServer } from "graphql-yoga";
 import { Prisma } from "prisma-binding";
 
 import * as AuthPayload from "./resolvers/AuthPayload";
-import * as Query from "./resolvers/Query";
+import Query from "./resolvers/Query";
 import Mutation from "./resolvers/Mutation";
 
 if (process.env.NODE_ENV !== "production") {
