@@ -10,6 +10,8 @@ import Customers from "./components/Customers/Customers";
 import Customer from "./components/Customers/Customer";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Location from "./components/Location/Location";
+import Categories from "./components/Equipment/Categories";
+import EquipmentList from "./components/Equipment/EquipmentList";
 
 export default class App extends React.Component {
   public render() {
@@ -32,6 +34,8 @@ export default class App extends React.Component {
                   </Customers>
                   <Customer groupId={groupId} path="/customer/:customerId" />
                   <Location path="/location/:locationId" locationId="" />
+                  <Categories groupId={groupId} path="/equipment" />
+                  <EquipmentList path="/equipment/:categoryId" />
                 </Router>
               </>
             );

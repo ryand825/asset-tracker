@@ -64,7 +64,7 @@ export default class Location extends React.Component<
                 make: asset.equipment.name,
                 model: asset.equipment.model,
                 serial: asset.serial,
-                description: asset.description,
+                // description: asset.description,
                 id: asset.id
               };
             });
