@@ -14,8 +14,9 @@ export default function CreateFirst(props: CreateFirstProps) {
 
   return (
     <Container>
+      <h4>No {name} data available.</h4>
       <Button primary onClick={onClick}>
-        Create your first {name}
+        Add your first {name}
       </Button>
     </Container>
   );
@@ -23,10 +24,18 @@ export default function CreateFirst(props: CreateFirstProps) {
 
 const Container = styled.div`
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  text-align: center;
+  margin: auto;
+  width: 75%;
+  max-width: 400px;
 
   @media (min-width: ${cssVar.FULLSCREEN}px) {
     justify-content: flex-start;
     padding-left: 1em;
   }
 `;
+
+// const Text = styled.h4`
+
+// `

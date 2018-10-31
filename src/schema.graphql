@@ -8,6 +8,7 @@ type Query {
   getCustomerById(customerId: ID!): Customer
   getLocationById(locationId: ID!): Location
   getCategories(groupId: ID!): [Category]
+  getCategoryName(categoryId: ID!): Category
   getEquipmentList(categoryId: ID!): [Equipment]
 }
 
@@ -33,6 +34,7 @@ type Mutation {
   createLocationNote(locationId: ID!, content: String!, groupId: ID!): Location
   deleteCustomer(customerId: ID!): Customer
   deleteLocation(locationId: ID!): Location
+  deleteEquipmentCategory(categoryId: ID!): Category
 }
 
 type User {

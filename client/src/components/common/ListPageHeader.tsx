@@ -8,7 +8,7 @@ export interface ListPageHeaderProps {
   title: string;
   titleAffix?: string;
   subTitle?: string;
-  deleteToggle: () => void;
+  deleteToggle?: () => void;
 }
 
 export default class ListPageHeader extends React.Component<
@@ -24,9 +24,11 @@ export default class ListPageHeader extends React.Component<
             {title} <small>{titleAffix && `- ${titleAffix}`}</small>
           </h3>
 
-          <Button warning onClick={deleteToggle}>
-            Delete
-          </Button>
+          {deleteToggle && (
+            <Button warning onClick={deleteToggle}>
+              Delete
+            </Button>
+          )}
         </Header>
         <SubHeader>{subTitle}</SubHeader>
       </>

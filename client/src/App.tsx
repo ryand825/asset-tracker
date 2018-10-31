@@ -35,7 +35,11 @@ export default class App extends React.Component {
                   <Customer groupId={groupId} path="/customer/:customerId" />
                   <Location path="/location/:locationId" locationId="" />
                   <Categories groupId={groupId} path="/equipment" />
-                  <EquipmentList path="/equipment/:categoryId" />
+                  <EquipmentList
+                    groupId={groupId}
+                    path="/equipment/:categoryId"
+                    categoryId=""
+                  />
                 </Router>
               </>
             );

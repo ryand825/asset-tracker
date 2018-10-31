@@ -26,6 +26,32 @@ const deleteMutations = {
     return customer;
   },
 
+  deleteEquipmentCategory: async (parent, args, context, info) => {
+    const { categoryId } = args;
+
+    const group = await context.db.query.category(
+      {
+        where: { id: categoryId }
+      },
+      `{id group{id}}`
+    );
+    if (group) {
+      const groupId = group.group.id;
+      await UserInGroup(parent, groupId, context);
+    } else {
+      throw new Error("Category not found");
+    }
+
+    const category = await context.db.mutation.deleteCategory(
+      {
+        where: { id: categoryId }
+      },
+      info
+    );
+
+    return category;
+  },
+
   deleteLocation: async (parent, args, context, info) => {
     const locationGroup = await context.db.query.location(
       {

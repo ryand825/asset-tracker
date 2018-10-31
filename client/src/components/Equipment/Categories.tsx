@@ -2,6 +2,7 @@ import * as React from "react";
 import { Query } from "react-apollo";
 
 import { EQUIPMENT_CATEGORIES_QUERY } from "../../gql/equipment";
+import ListPageHeader from "../common/ListPageHeader";
 import ListView from "../common/ListView";
 import CreateCategory from "./CreateCategory";
 
@@ -42,6 +43,7 @@ export default class Categories extends React.Component<CategoriesProps, any> {
 
             return (
               <>
+                <ListPageHeader title="Equipment Categories" />
                 <ListView
                   openCreateMode={this.openCreateMode}
                   listData={categoryData}

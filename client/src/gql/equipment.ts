@@ -15,10 +15,16 @@ export const EQUIPMENT_CATEGORIES_QUERY = gql`
 
 export const EQUIPMENT_LIST_QUERY = gql`
   query getEquipmentList($categoryId: ID!) {
+    getCategoryName(categoryId: $categoryId) {
+      name
+    }
     getEquipmentList(categoryId: $categoryId) {
       id
       name
       model
+      category {
+        name
+      }
       assets {
         id
       }
@@ -39,6 +45,15 @@ export const CREATE_CATEGORY = gql`
       group {
         id
       }
+    }
+  }
+`;
+
+export const DELETE_EQUIPMENT_CATEGORY = gql`
+  mutation deleteEquipmentCategory($categoryId: ID!) {
+    deleteEquipmentCategory(categoryId: $categoryId) {
+      name
+      id
     }
   }
 `;

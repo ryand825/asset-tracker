@@ -16,6 +16,18 @@ const equipmentQueries = {
     return categories;
   },
 
+  getCategoryName: async (parent, args, context, info) => {
+    const { categoryId } = args;
+    const category = await context.db.query.category(
+      {
+        where: { id: categoryId }
+      },
+      `{name}`
+    );
+
+    return category;
+  },
+
   getEquipmentList: async (parent, args, context, info) => {
     const { categoryId } = args;
 

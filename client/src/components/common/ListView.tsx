@@ -59,7 +59,6 @@ class ListView extends React.Component<ListViewProps, any> {
       } else {
         return (
           <ColumnHeader key={key}>
-            {/* <Link to={`/customers/create/${linkFrom}`}>+</Link> */}
             <button onClick={this.props.openCreateMode}>+</button>
           </ColumnHeader>
         );
@@ -90,18 +89,10 @@ class ListView extends React.Component<ListViewProps, any> {
     });
 
     return (
-      <>
-        {/* {isCreateMode && (
-          <NewCustomer
-            createOptions={createOptions}
-            closeCreateMode={this.closeCreateMode}
-          />
-        )} */}
-        <Grid columns={columns}>
-          {headerRow}
-          {contentRows}
-        </Grid>
-      </>
+      <Grid columns={columns}>
+        {headerRow}
+        {contentRows}
+      </Grid>
     );
   }
 }
