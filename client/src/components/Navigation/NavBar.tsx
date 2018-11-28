@@ -5,9 +5,6 @@ import { Link } from "@reach/router";
 import Hamburger from "../common/Hamburger";
 import Modal from "../common/Modal";
 
-// import { Query } from "react-apollo";
-// import gql from "graphql-tag";
-
 import cssVar from "../../variables";
 
 export interface NavBarProps {
@@ -84,6 +81,7 @@ const Header = styled.header`
   @media (min-width: ${cssVar.FULLSCREEN}px) {
     & i {
       display: none;
+    }
   }
 `;
 
@@ -107,7 +105,9 @@ const SideNav = styled<{ menuOpen: boolean }, "aside">("aside")`
   }
 `;
 
+// Group selection is not being used, yet
 const GroupSelect = styled.select`
+  display: none;
   background-color: ${cssVar.PRIMARY_LIGHT};
   font-size: 18px;
   height: 40px;

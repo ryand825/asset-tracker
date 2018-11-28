@@ -12,6 +12,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Location from "./components/Location/Location";
 import Categories from "./components/Equipment/Categories";
 import EquipmentList from "./components/Equipment/EquipmentList";
+import AssetList from "./components/Equipment/AssetList";
 
 export default class App extends React.Component {
   public render() {
@@ -39,6 +40,11 @@ export default class App extends React.Component {
                     groupId={groupId}
                     path="/equipment/:categoryId"
                     categoryId=""
+                  />
+                  <AssetList
+                    groupId={groupId}
+                    path="/assets/:equipmentId"
+                    equipmentId=""
                   />
                 </Router>
               </>

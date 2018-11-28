@@ -10,6 +10,7 @@ type Query {
   getCategories(groupId: ID!): [Category]
   getCategoryName(categoryId: ID!): Category
   getEquipmentList(categoryId: ID!): [Equipment]
+  getAssetsByEquipmentId(equipmentId: ID!): [Asset]
 }
 
 type Mutation {

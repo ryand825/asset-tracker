@@ -57,3 +57,21 @@ export const DELETE_EQUIPMENT_CATEGORY = gql`
     }
   }
 `;
+
+export const GET_ASSET_LIST_BY_EQUIPMENT_ID = gql`
+  query getAssetsByEquipmentId($equipmentId: ID!) {
+    getAssetsByEquipmentId(equipmentId: $equipmentId) {
+      id
+      equipment {
+        id
+        name
+      }
+      location {
+        id
+        name
+      }
+      serial
+      description
+    }
+  }
+`;

@@ -53,6 +53,33 @@ const equipmentQueries = {
     );
 
     return equipmentList;
+  },
+
+  getAssetsByEquipmentId: async (parent, args, context, info) => {
+    const { equipmentId } = args;
+
+    const equipmentGroup = await context.db.query.equipment(
+      {
+        where: { id: equipmentId }
+      },
+      `{id category{id group{id}}}`
+    );
+
+    if (equipmentGroup) {
+      const groupId = equipmentGroup.category.group.id;
+      await UserInGroup(parent, groupId, context);
+    } else {
+      throw new Error("Equipment not found");
+    }
+
+    const assetList = await context.db.query.assets(
+      {
+        where: { equipment: { id: equipmentId } }
+      },
+      info
+    );
+
+    return assetList;
   }
 };
 
